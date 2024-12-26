@@ -62,7 +62,7 @@ public class ModelTabeleUlogovani extends AbstractTableModel implements Runnable
     public void run() {
         try {
             while (!Thread.currentThread().isInterrupted()) {
-                Thread.sleep(500);
+                Thread.sleep(100);
                 LinkedList<Administrator> tempKorisnici = serverNit.vratiUlogovane();
                 
                 boolean moraRefresh = false;

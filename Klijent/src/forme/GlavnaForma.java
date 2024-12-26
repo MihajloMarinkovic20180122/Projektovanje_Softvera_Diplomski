@@ -155,7 +155,7 @@ public class GlavnaForma extends javax.swing.JFrame{
             if (izbor == JOptionPane.YES_OPTION) {
                 Sesija.getInstanca().setUlogovani(null);
                 KlijentKontrolerAdministrator.getInstanca().logout();
-                this.dispose();
+                System.exit(0);
                 //new LoginForma().setVisible(true);
             }
             

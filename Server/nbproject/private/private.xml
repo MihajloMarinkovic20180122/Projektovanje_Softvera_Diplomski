@@ -2,16 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/D:/SeminarskiFinalFinal/SeminarskiFinal/Server/src/baza/DBBroker.java</file>
-            <file>file:/D:/SeminarskiFinalFinal/SeminarskiFinal/Server/src/sistemske/operacije/zaposleni/SOVratiSveZaposlene.java</file>
-            <file>file:/D:/SeminarskiFinalFinal/SeminarskiFinal/Server/src/sistemske/operacije/projekti/SOVratiProjektePretraga.java</file>
-            <file>file:/D:/SeminarskiFinalFinal/SeminarskiFinal/Server/src/niti/ObradaKlijentskihZahtevaNit.java</file>
-            <file>file:/D:/SeminarskiFinalFinal/SeminarskiFinal/Server/src/sistemske/operacije/SOOpsteIzvrsenje.java</file>
-            <file>file:/D:/SeminarskiFinalFinal/SeminarskiFinal/Server/src/sistemske/operacije/projekti/SOIzmeniProjekat.java</file>
-            <file>file:/D:/SeminarskiFinalFinal/SeminarskiFinal/Server/src/sistemske/operacije/angazovanja/SOVratiAngazovanjaZaposlenog.java</file>
-            <file>file:/D:/SeminarskiFinalFinal/SeminarskiFinal/Server/src/niti/ServerskaNit.java</file>
-            <file>file:/D:/SeminarskiFinalFinal/SeminarskiFinal/Server/src/modeli/ModelTabeleUlogovani.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
