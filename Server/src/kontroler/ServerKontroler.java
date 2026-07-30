@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import sistemske.operacije.administratori.SOVratiSveAdministratore;
 import sistemske.operacije.angazovanja.SOVratiAngazovanjaZaposlenog;
+import sistemske.operacije.angazovanja.SOVratiSvaAngazovanja;
 import sistemske.operacije.login.SOLogin;
 import sistemske.operacije.login.organizacioneceline.SOVratiOrganizacioneCeline;
 import sistemske.operacije.login.radnamesta.SOVratiRadnaMesta;
@@ -145,6 +146,12 @@ public class ServerKontroler {
     public LinkedList<Angazovanje> vratiAngazovanjaZaZaposlenog(Zaposleni zaposleniZaVratitiAngazovanja) throws SQLException {
         SOVratiAngazovanjaZaposlenog so = new SOVratiAngazovanjaZaposlenog();
         so.sOOpsteIzvrsenje(zaposleniZaVratitiAngazovanja);
+        return so.getLista();
+    }
+
+    public LinkedList<Angazovanje> vratiAngazovanja() throws Exception {
+        SOVratiSvaAngazovanja so = new SOVratiSvaAngazovanja();
+        so.sOOpsteIzvrsenje(new Angazovanje());
         return so.getLista();
     }
     

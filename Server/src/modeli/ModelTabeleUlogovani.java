@@ -19,6 +19,7 @@ public class ModelTabeleUlogovani extends AbstractTableModel implements Runnable
     private LinkedList<Administrator> listaUlogovanih;
     private LinkedList<Administrator> lista;
     private ServerskaNit serverNit;
+    private String odabirJezika = lokalizacija.JezikMenadzer.getOdabir();
     private String[] kolone = new String[]{"Email", "Status"};
 
     public ModelTabeleUlogovani(ServerskaNit serverNit) throws Exception {
@@ -39,6 +40,19 @@ public class ModelTabeleUlogovani extends AbstractTableModel implements Runnable
 
     @Override
     public String getColumnName(int column) {
+        switch (odabirJezika) {
+            case "srpski - latinica":
+                kolone = new String[]{"Email", "Status"};
+                break;
+            case "srpski - cirilica":
+                kolone = new String[]{"Емаил", "Статус"};
+                break;
+            case "english":
+                kolone = new String[]{"Email", "Status"};
+                break;
+            default:
+                throw new AssertionError();
+        }
         return kolone[column];
     }
     
@@ -50,9 +64,23 @@ public class ModelTabeleUlogovani extends AbstractTableModel implements Runnable
                 return administrator.getEmail();
             case 1:
                 if(listaUlogovanih.contains(administrator)){
-                    return "Prijavljen";
+                    switch (odabirJezika) {
+                        case "srpski - latinica":
+                            return "Prijavljen";
+                        case "srpski - cirilica":
+                            return "Пријављен";
+                        case "english":
+                            return "Logged in";
+                    }
                 }
-                return "Odjavljen";
+                switch (odabirJezika) {
+                    case "srpski - latinica":
+                        return "Odjavljen";
+                    case "srpski - cirilica":
+                        return "Одјављен";
+                    case "english":
+                        return "Logged out";
+                }
             default:
                 return "";
         }

@@ -28,7 +28,12 @@ public class KlijentKontrolerLogin extends OpstiKlijentskiKontroler{
     
     
     public Administrator login(Administrator administrator) throws Exception {
-        return (Administrator) posaljiZahtev(Operacije.LOGIN, administrator);
+        String koristiJSON = transfer.Transfer.getKoristiJSON();
+        if(koristiJSON.equals("true")){
+            return (Administrator) posaljiZahtevJSON(Operacije.LOGIN, administrator, Administrator.class);
+        } else {
+            return (Administrator) posaljiZahtev(Operacije.LOGIN, administrator);
+        }
     }
     
     

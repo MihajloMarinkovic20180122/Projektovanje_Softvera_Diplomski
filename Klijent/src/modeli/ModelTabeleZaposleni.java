@@ -15,6 +15,7 @@ import javax.swing.table.AbstractTableModel;
 public class ModelTabeleZaposleni extends AbstractTableModel{
 
     LinkedList<Zaposleni> listaZaposlenih = new LinkedList<>();
+    private String odabirJezika = lokalizacija.JezikMenadzer.getOdabir();
     String[] kolone = {"Ime","Prezime","Email", "Radno Mesto"};
 
     public void setListaZaposlenih(LinkedList<Zaposleni> listaZaposlenih) {
@@ -34,6 +35,19 @@ public class ModelTabeleZaposleni extends AbstractTableModel{
 
     @Override
     public String getColumnName(int column) {
+        switch (odabirJezika) {
+            case "srpski - latinica":
+                kolone = new String[]{"Ime","Prezime","Email", "Radno Mesto"};
+                break;
+            case "srpski - cirilica":
+                kolone = new String[]{"Име","Презиме","Емаил", "Радно Место"};
+                break;
+            case "english":
+                kolone = new String[]{"Name","Surname","Email", "Job Title"};
+                break;
+            default:
+                throw new AssertionError();
+        }
         return kolone[column];
     }
 

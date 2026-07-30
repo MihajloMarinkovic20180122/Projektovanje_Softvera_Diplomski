@@ -28,7 +28,7 @@ public class PostavkaParametara {
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(Konstante.LOKACIJA_PARAMETARA_BAZE);
-            prop.setProperty(Konstante.LOKACIJA_BAZE_KEY, "jdbc:mysql://localhost:3306/projektovanje_softvera_seminarski");
+            prop.setProperty(Konstante.LOKACIJA_BAZE_KEY, "jdbc:mysql://localhost:3306/diplomski");
             prop.setProperty(Konstante.USERNAME_BAZA_KEY, "root");
             prop.setProperty(Konstante.PASSWORD_BAZA_KEY, "");
             prop.store(fos, null);

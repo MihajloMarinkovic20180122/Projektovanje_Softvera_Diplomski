@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import kontroler.KlijentKontrolerZaposleni;
 import modeli.ModelTabeleAngazovanje;
 import modeli.ModelTabeleZaposleni;
@@ -35,8 +36,12 @@ public class IzmeniZaposlenogForma extends javax.swing.JDialog {
         super(parent, modal);
         try {
            initComponents();
+           if(lokalizacija.JezikMenadzer.getOdabir() == null){
+               lokalizacija.JezikMenadzer.setOdabir("srpski - latinica");
+           }
+           osveziLokalizaciju();
            setLocationRelativeTo(null);
-           setTitle("Izmena i Brisanje zaposlenog");
+           setTitle(lokalizacija.JezikMenadzer.get("izmenaIBrisanjeZaposlenog"));
            btnObrisiZaposlenog.setEnabled(false);
            btnIzmeniZaposlenog.setEnabled(false);
            //tblZaposleni.setAutoCreateRowSorter(true);
@@ -320,9 +325,9 @@ public class IzmeniZaposlenogForma extends javax.swing.JDialog {
             mtz.setListaZaposlenih(listaZaposlenihIzPretrage);
             LinkedList<Zaposleni> vracenaLista = mtz.vratiListu();
             if(vracenaLista.size() == 0){
-                JOptionPane.showMessageDialog(rootPane, "Sistem ne može da nađe zaposlenog po zadatoj vrednosti.", "Neuspešna pretraga.", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(rootPane, lokalizacija.JezikMenadzer.get("neMozeDaNadjeZaposlenog"), lokalizacija.JezikMenadzer.get("neuspesnaPretraga"), JOptionPane.INFORMATION_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(rootPane, "Sistem je našao zaposlenog po zadatoj vrednosti.", "Uspešno izvršeno.", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(rootPane, lokalizacija.JezikMenadzer.get("nasaoZaposelnog"), lokalizacija.JezikMenadzer.get("uspesnoIzvrseno"), JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -342,7 +347,7 @@ public class IzmeniZaposlenogForma extends javax.swing.JDialog {
                 popuniPodatkeUcitanogZaposlenog(ucitaniZaposleni);
                 btnIzmeniZaposlenog.setEnabled(true);
                 btnObrisiZaposlenog.setEnabled(true);
-                JOptionPane.showMessageDialog(rootPane, "Sistem je učitao zaposlenog.", "Uspešno izvršeno.", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(rootPane, lokalizacija.JezikMenadzer.get("uspesnoUcitaoZaposlenog"), lokalizacija.JezikMenadzer.get("uspesnoIzvrseno"), JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (Exception ex){
             try {
@@ -366,7 +371,7 @@ public class IzmeniZaposlenogForma extends javax.swing.JDialog {
     private void btnObrisiZaposlenogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnObrisiZaposlenogActionPerformed
         try {
             KlijentKontrolerZaposleni.getInstanca().obrisiZaposlenog(odabraniZaposleni);
-            JOptionPane.showMessageDialog(rootPane, "Sistem је obrisao zaposlenog: " + odabraniZaposleni, "Uspešno izvršeno.", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(rootPane, lokalizacija.JezikMenadzer.get("obrisaoZaposlenog") + ": " + odabraniZaposleni, lokalizacija.JezikMenadzer.get("uspesnoIzvrseno"), JOptionPane.INFORMATION_MESSAGE);
             LinkedList<Zaposleni> listaSvihZaposlnih = KlijentKontrolerZaposleni.getInstanca().vratiZaposlene();
             if (listaSvihZaposlnih.size() > 0) {
                 ModelTabeleZaposleni mtz = (ModelTabeleZaposleni) tblZaposleni.getModel();
@@ -387,7 +392,7 @@ public class IzmeniZaposlenogForma extends javax.swing.JDialog {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(rootPane, "Zaposleni " + odabraniZaposleni + " nije obrisan.", "Doslo je do greske!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(rootPane, lokalizacija.JezikMenadzer.get("zaposleni") + " " + odabraniZaposleni + " " + lokalizacija.JezikMenadzer.get("nijeObrisan"), lokalizacija.JezikMenadzer.get("dosloJeDoGreske"), JOptionPane.ERROR_MESSAGE);
             //JOptionPane.showMessageDialog(rootPane, "Sistem ne može da obriše zaposlenog.", "Doslo je do greske!", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnObrisiZaposlenogActionPerformed
@@ -410,7 +415,7 @@ public class IzmeniZaposlenogForma extends javax.swing.JDialog {
             Zaposleni izmenjenZaposleni = new Zaposleni();
             if (proveriNovePodatke(izmenjenZaposleni)) {
                 KlijentKontrolerZaposleni.getInstanca().izmeniZaposlenog(izmenjenZaposleni);
-                JOptionPane.showMessageDialog(rootPane, "Sistem je zapamtio zaposlenog.", "Uspešno izvršeno.", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(rootPane, lokalizacija.JezikMenadzer.get("zapamtioZaposlenog"), lokalizacija.JezikMenadzer.get("uspesnoIzvrseno"), JOptionPane.INFORMATION_MESSAGE);
                 LinkedList<Zaposleni> listaSvihZaposlnih = KlijentKontrolerZaposleni.getInstanca().vratiZaposlene();
                 ModelTabeleZaposleni mtz = (ModelTabeleZaposleni) tblZaposleni.getModel();
                 mtz.setListaZaposlenih(listaSvihZaposlnih);
@@ -512,39 +517,39 @@ public class IzmeniZaposlenogForma extends javax.swing.JDialog {
         
         String ime = txtZaposleniIme.getText().trim();
             if (ime.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Polje Ime ne sme biti prazno.", "Greska pri izmeni zaposlenog!", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, lokalizacija.JezikMenadzer.get("imeNeSmePrazno"), lokalizacija.JezikMenadzer.get("greskaPriIzmeniZaposlenog"), JOptionPane.ERROR_MESSAGE);
                 return false;
             }
             if(!ime.matches("^[A-ZČĆŽŠĐ][a-zčćžšđ]+$")){
-                JOptionPane.showMessageDialog(null, "Ime nije u ispravnom formatu.", "Greska pri izmeni zaposlenog!", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, lokalizacija.JezikMenadzer.get("imeNeispravanFormat"), lokalizacija.JezikMenadzer.get("greskaPriIzmeniZaposlenog"), JOptionPane.ERROR_MESSAGE);
                 return false;
             }
         izmenjenZaposleni.setIme(ime);
         
         String prezime = txtZaposleniPrezime.getText().trim();
             if (prezime.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Polje Prezime ne sme biti prazno.", "Greska pri izmeni zaposlenog!", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, lokalizacija.JezikMenadzer.get("prezimeNeSmePrazno"), lokalizacija.JezikMenadzer.get("greskaPriIzmeniZaposlenog"), JOptionPane.ERROR_MESSAGE);
                 return false;
             }
             if(!prezime.matches("^[A-ZČĆŽŠĐ][a-zčćžšđ]+$")){
-                JOptionPane.showMessageDialog(null, "Prezime nije u ispravnom formatu.", "Greska pri izmeni zaposlenog!", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, lokalizacija.JezikMenadzer.get("prezimeNeispravanFormat"), lokalizacija.JezikMenadzer.get("greskaPriIzmeniZaposlenog"), JOptionPane.ERROR_MESSAGE);
                 return false;
             }
         izmenjenZaposleni.setPrezime(prezime);
         
         String email = txtZaposleniEmail.getText().trim();
             if (email.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Polje Email ne sme biti prazno.", "Greska pri izmeni zaposlenog!", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, lokalizacija.JezikMenadzer.get("emailNeSmePrazno"), lokalizacija.JezikMenadzer.get("greskaPriIzmeniZaposlenog"), JOptionPane.ERROR_MESSAGE);
                 return false;
             }
             if(!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")){
-                JOptionPane.showMessageDialog(null, "Email nije u ispravnom formatu.", "Greska pri izmeni zaposlenog!", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, lokalizacija.JezikMenadzer.get("emailNeispravanFormat"), lokalizacija.JezikMenadzer.get("greskaPriIzmeniZaposlenog"), JOptionPane.ERROR_MESSAGE);
                 return false;
             }
             LinkedList<Zaposleni> listaZaposlenih = KlijentKontrolerZaposleni.getInstanca().vratiZaposlene();
             for (Zaposleni zaposleni : listaZaposlenih) {
                 if(zaposleni.getEmail().equals(email) && zaposleni.getZaposleniId() != Integer.parseInt(txtZaposleniID.getText())){
-                    JOptionPane.showMessageDialog(null, "Vec postoji korisnik sa unetim Email-om.", "Greska pri izmeni zaposlenog!", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, lokalizacija.JezikMenadzer.get("vecPostojiIstiMejl"), lokalizacija.JezikMenadzer.get("greskaPriIzmeniZaposlenog"), JOptionPane.ERROR_MESSAGE);
                     return false;
                 }
             }
@@ -553,7 +558,7 @@ public class IzmeniZaposlenogForma extends javax.swing.JDialog {
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy.");
         Date datumZaposlenja = sdf.parse(txtZaposleniDatumZaposlenja.getText());
         if(datumZaposlenja.after(new Date())){
-            JOptionPane.showMessageDialog(null, "Datum zaposlenja ne sme biti u buducnosti.", "Greska pri izmeni zaposlenog!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, lokalizacija.JezikMenadzer.get("datumZaposlenjaNeSmeBuducnost"), lokalizacija.JezikMenadzer.get("greskaPriIzmeniZaposlenog"), JOptionPane.ERROR_MESSAGE);
             return false;
         }
         
@@ -564,5 +569,34 @@ public class IzmeniZaposlenogForma extends javax.swing.JDialog {
         izmenjenZaposleni.setRadnoMesto((RadnoMesto) cmbZaposleniRadnoMesto.getSelectedItem());
             
         return true;
+    }
+    
+    private void osveziLokalizaciju() {
+        javax.swing.border.Border border = panelPronadjiZaposlenog.getBorder();
+        if (border instanceof javax.swing.border.TitledBorder) {
+            javax.swing.border.TitledBorder titledBorder = (javax.swing.border.TitledBorder) border;
+            titledBorder.setTitle(lokalizacija.JezikMenadzer.get("pronadjiZaposlenog"));
+            panelPronadjiZaposlenog.repaint();
+        }
+        javax.swing.border.Border border2 = jPanel1.getBorder();
+        if (border2 instanceof javax.swing.border.TitledBorder) {
+            javax.swing.border.TitledBorder titledBorder2 = (javax.swing.border.TitledBorder) border2;
+            titledBorder2.setTitle(lokalizacija.JezikMenadzer.get("ucitaniZaposleni"));
+            jPanel1.repaint();
+        }
+        btnPronadjiZaposlenog.setText(lokalizacija.JezikMenadzer.get("pronadji"));
+        jLabel1.setText(lokalizacija.JezikMenadzer.get("id") + ':');
+        jLabel2.setText(lokalizacija.JezikMenadzer.get("ime") + ':');
+        jLabel3.setText(lokalizacija.JezikMenadzer.get("prezime") + ':');
+        jLabel4.setText(lokalizacija.JezikMenadzer.get("email") + ':');
+        jLabel5.setText(lokalizacija.JezikMenadzer.get("datumZaposlenja") + ':');
+        jLabel6.setText(lokalizacija.JezikMenadzer.get("organizacionaCelina") + ':');
+        jLabel7.setText(lokalizacija.JezikMenadzer.get("radnoMesto") + ':');
+        btnObrisiZaposlenog.setText(lokalizacija.JezikMenadzer.get("obrisiZaposlenog"));
+        btnIzmeniZaposlenog.setText(lokalizacija.JezikMenadzer.get("izmeniZaposlenog"));
+        UIManager.put("OptionPane.yesButtonText", lokalizacija.JezikMenadzer.get("da"));
+        UIManager.put("OptionPane.noButtonText", lokalizacija.JezikMenadzer.get("ne"));
+        UIManager.put("OptionPane.okButtonText", lokalizacija.JezikMenadzer.get("ok"));
+        UIManager.put("OptionPane.cancelButtonText", lokalizacija.JezikMenadzer.get("cancel"));
     }
 }

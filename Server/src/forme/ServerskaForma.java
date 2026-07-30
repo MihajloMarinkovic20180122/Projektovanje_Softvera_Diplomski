@@ -5,9 +5,11 @@
 package forme;
 
 import domen.Administrator;
+import java.awt.Dimension;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,6 +34,15 @@ public class ServerskaForma extends javax.swing.JFrame {
     public ServerskaForma() {
         try{
             initComponents();
+            postaviFiksneSirineElemenata(); 
+            Locale latinica = new Locale.Builder()
+                        .setLanguage("sr")
+                        .setScript("Latn")
+                        .build();
+
+            lokalizacija.JezikMenadzer.setLocale(latinica);
+            lokalizacija.JezikMenadzer.setOdabir("srpski - latinica");
+            osveziLokalizaciju();
             setLocationRelativeTo(null);
             Properties parametriServera = new Properties();
             FileInputStream fis = new FileInputStream(Konstante.LOKACIJA_PARAMETARA_SERVERA);
@@ -60,6 +71,7 @@ public class ServerskaForma extends javax.swing.JFrame {
         tblUlogovani = new javax.swing.JTable();
         btnIzlogujAdministratora = new javax.swing.JButton();
         btnIzlogujSve = new javax.swing.JButton();
+        cmbJezik = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -127,6 +139,13 @@ public class ServerskaForma extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        cmbJezik.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "srpski - latinica", "српски - ћирилица", "english" }));
+        cmbJezik.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbJezikActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -137,7 +156,9 @@ public class ServerskaForma extends javax.swing.JFrame {
                     .addComponent(panelAdministratori, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnPokreniServer)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 226, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(cmbJezik, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addComponent(btnZaustaviServer)))
                 .addContainerGap())
         );
@@ -147,7 +168,8 @@ public class ServerskaForma extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnPokreniServer)
-                    .addComponent(btnZaustaviServer))
+                    .addComponent(btnZaustaviServer)
+                    .addComponent(cmbJezik, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(7, 7, 7)
                 .addComponent(panelAdministratori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -211,6 +233,52 @@ public class ServerskaForma extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnIzlogujSveActionPerformed
 
+    private void cmbJezikActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbJezikActionPerformed
+        String jezik = (String) cmbJezik.getSelectedItem();
+        switch (jezik) {
+            case "srpski - latinica":
+                Locale latinica = new Locale.Builder()
+                        .setLanguage("sr")
+                        .setScript("Latn")
+                        .build();
+
+                lokalizacija.JezikMenadzer.setLocale(latinica);
+                lokalizacija.JezikMenadzer.setOdabir("srpski - latinica");
+                osveziLokalizaciju();
+                break;
+            case "српски - ћирилица":
+                lokalizacija.JezikMenadzer.setLocale(Locale.of("sr"));
+                lokalizacija.JezikMenadzer.setOdabir("srpski - cirilica");
+                osveziLokalizaciju();
+                break;
+            case "english":
+                lokalizacija.JezikMenadzer.setLocale(Locale.ENGLISH);
+                lokalizacija.JezikMenadzer.setOdabir("english");
+                osveziLokalizaciju();
+                break;
+            default:
+            throw new AssertionError();
+        }
+    }//GEN-LAST:event_cmbJezikActionPerformed
+
+    private void osveziLokalizaciju() {
+        btnPokreniServer.setText(lokalizacija.JezikMenadzer.get("pokreniServer"));
+        btnZaustaviServer.setText(lokalizacija.JezikMenadzer.get("zaustaviServer"));
+    }
+    
+    private void postaviFiksneSirineElemenata() {
+        Dimension a = new Dimension(130, 28);
+        btnPokreniServer.setPreferredSize(a);
+        btnPokreniServer.setMinimumSize(a);
+        btnPokreniServer.setMaximumSize(a);
+        btnZaustaviServer.setPreferredSize(a);
+        btnZaustaviServer.setMinimumSize(a);
+        btnZaustaviServer.setMaximumSize(a);
+        Dimension b = new Dimension(90, 28);
+        cmbJezik.setPreferredSize(b);
+        cmbJezik.setMinimumSize(b);
+        cmbJezik.setMaximumSize(b);
+    }
     /**
      * @param args the command line arguments
      */
@@ -251,6 +319,7 @@ public class ServerskaForma extends javax.swing.JFrame {
     private javax.swing.JButton btnIzlogujSve;
     private javax.swing.JButton btnPokreniServer;
     private javax.swing.JButton btnZaustaviServer;
+    private javax.swing.JComboBox<String> cmbJezik;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel panelAdministratori;
     private javax.swing.JTable tblUlogovani;

@@ -8,6 +8,7 @@ import domen.Prioritet;
 import domen.Stanje;
 import domen.Projekat;
 import domen.Zaposleni;
+import forme.GlavnaForma;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,6 +17,7 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import kontroler.KlijentKontrolerProjekat;
 import kontroler.KlijentKontrolerZaposleni;
 import modeli.ModelTabeleProjekti;
@@ -33,12 +35,18 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
     ModelTabeleProjekti mtp;
     ModelTabeleZaposleni mtz;
     Projekat odabraniProjekat;
+    private GlavnaForma glavnaForma;
     public ObrisiProjekatForma(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        this.glavnaForma = (GlavnaForma) parent;
         try {
             initComponents();
+            if(lokalizacija.JezikMenadzer.getOdabir() == null){
+                lokalizacija.JezikMenadzer.setOdabir("srpski - latinica");
+            }
+            osveziLokalizaciju();
             setLocationRelativeTo(null);
-            setTitle("Izmena i Brisanje projekta");
+            setTitle(lokalizacija.JezikMenadzer.get("IzmenaIBrisanjeProjekta"));
             //tblProjekti.setAutoCreateRowSorter(true);
             mtp = new ModelTabeleProjekti();
             tblProjekti.setModel(mtp);
@@ -128,7 +136,7 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 605, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(txtPretraga)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -224,7 +232,7 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
                         .addComponent(btnObrisiProjekat)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnIzmeniProjekat))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 633, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblNazivProjekta1)
@@ -240,12 +248,12 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
                             .addComponent(txtPocetakRealizacijeProjekta)
                             .addComponent(cmbRukovodilacProjekta, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cmbPrioritetProjekta, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addComponent(cmbZaposleni, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(cmbZaposleni, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnDodajZaposlenog)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnObrisiZaposlenog, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(btnObrisiZaposlenog, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(txtIdProjekta)
                             .addComponent(cmbStanjeProjekta, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
@@ -324,9 +332,9 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
             mtp.setListaProjekata(listaProjekataIzPretrage);
             LinkedList<Projekat> vracenaLista = mtp.vratiListu();
             if(vracenaLista.size() == 0){
-                JOptionPane.showMessageDialog(rootPane, "Sistem ne može da nađe projekat po zadatoj vrednosti.", "Neuspešna pretraga.", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(rootPane, lokalizacija.JezikMenadzer.get("neMozeDaNadjeProjekat"), lokalizacija.JezikMenadzer.get("neuspesnaPretraga"), JOptionPane.INFORMATION_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(rootPane, "Sistem je našao projekat po zadatoj vrednosti.", "Uspešno izvršeno.", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(rootPane, lokalizacija.JezikMenadzer.get("nasaoProjekat"), lokalizacija.JezikMenadzer.get("uspesnoIzvrseno"), JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -342,7 +350,7 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
             KlijentKontrolerProjekat.getInstanca().obrisiProjekat(projekat);
             
             //JOptionPane.showMessageDialog(rootPane, "Uspesno ste obrisali projekat: " + projekat);
-            JOptionPane.showMessageDialog(rootPane, "Sistem je obrisao projekat.", "Uspešno izvršeno.", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(rootPane, lokalizacija.JezikMenadzer.get("obrisaoProjekat"), lokalizacija.JezikMenadzer.get("uspesnoIzvrseno"), JOptionPane.INFORMATION_MESSAGE);
             
             mtp.setListaProjekata(KlijentKontrolerProjekat.getInstanca().vratiProjekte());
             
@@ -357,12 +365,15 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
             mtz.setListaZaposlenih(new LinkedList<>());
             btnObrisiProjekat.setEnabled(false);
             btnIzmeniProjekat.setEnabled(false);
+            if (glavnaForma != null) {
+                glavnaForma.iscrtajGrafike();
+            }
             
 
         } catch (Exception ex) {
             ex.printStackTrace();
             //JOptionPane.showMessageDialog(null, ex.getMessage(), "Greska pri brisanju projekta!", JOptionPane.ERROR_MESSAGE);
-            JOptionPane.showMessageDialog(rootPane, ex.getMessage(), "Doslo je do greske!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(rootPane, ex.getMessage(), lokalizacija.JezikMenadzer.get("dosloJeDoGreske"), JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnObrisiProjekatActionPerformed
 
@@ -372,7 +383,7 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
         LinkedList<Zaposleni> listaZaposlenihUTabeli = mtz.vratiListu();
         if(listaZaposlenihUTabeli.size() > 0){
             if(listaZaposlenihUTabeli.contains(zaposleni)){
-                JOptionPane.showMessageDialog(rootPane, "Zaposleni je vec dodat.", "Obaveštenje", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(rootPane, lokalizacija.JezikMenadzer.get("zaposleniJeVecDodat"), lokalizacija.JezikMenadzer.get("obavestenje"), JOptionPane.INFORMATION_MESSAGE);
             } else {
                 mtz.dodajZaposlenog(zaposleni);
             }
@@ -388,7 +399,7 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
             ModelTabeleZaposleni mtz = (ModelTabeleZaposleni) tblZaposleni.getModel();
             mtz.obrisiZaposlenog(red);
         } else {
-            JOptionPane.showMessageDialog(rootPane, "Odaberite zaposlenog iz liste kod zelite da uklonite sa projekta.", "Obaveštenje", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(rootPane, lokalizacija.JezikMenadzer.get("odaberiteZaposlenogZaBrisanje"), lokalizacija.JezikMenadzer.get("obavestenje"), JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnObrisiZaposlenogActionPerformed
 
@@ -404,13 +415,13 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
                 popuniPodatkeUcitanogProjekta(ucitaniProjekat);
                 btnIzmeniProjekat.setEnabled(true);
                 btnObrisiProjekat.setEnabled(true);
-                JOptionPane.showMessageDialog(rootPane, "Sistem je učitao projekat.", "Uspešno izvršeno.", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(rootPane, lokalizacija.JezikMenadzer.get("uspesnoUcitaoProjekat"), lokalizacija.JezikMenadzer.get("uspesnoIzvrseno"), JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (Exception ex){
             try {
                 ex.printStackTrace();
                 //JOptionPane.showMessageDialog(rootPane, ex.getMessage(), "Doslo je do greske!", JOptionPane.ERROR_MESSAGE);
-                JOptionPane.showMessageDialog(rootPane, "Projekat " + odabraniProjekat + " je obrisan.", "Doslo je do greske.", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(rootPane, "Projekat " + odabraniProjekat + " je obrisan.", lokalizacija.JezikMenadzer.get("dosloJeDoGreske"), JOptionPane.INFORMATION_MESSAGE);
                 LinkedList<Projekat> listaSvihProjekata = KlijentKontrolerProjekat.getInstanca().vratiProjekte();
                 if (listaSvihProjekata.size() > 0) {
                     ModelTabeleProjekti mtp =  (ModelTabeleProjekti) tblProjekti.getModel();
@@ -430,15 +441,18 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
             Projekat izmenjeniProjekat = new Projekat();
             if(proveriNovePodatke(izmenjeniProjekat)){
                 KlijentKontrolerProjekat.getInstanca().izmeniProjekat(izmenjeniProjekat);
-                JOptionPane.showMessageDialog(rootPane, "Sistem je zapamtio projekat.", "Uspešno izvršeno.", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(rootPane, lokalizacija.JezikMenadzer.get("zapamtioProjekat"), lokalizacija.JezikMenadzer.get("uspesnoIzvrseno"), JOptionPane.INFORMATION_MESSAGE);
                 LinkedList<Projekat> listaSvihProjekata = KlijentKontrolerProjekat.getInstanca().vratiProjekte();
                 ModelTabeleProjekti mtp = (ModelTabeleProjekti) tblProjekti.getModel();
                 mtp.setListaProjekata(listaSvihProjekata);
                 btnObrisiProjekat.setEnabled(false);
+                if (glavnaForma != null) {
+                    glavnaForma.iscrtajGrafike();
+                }
             }
         } catch (Exception ex) {
             Logger.getLogger(ObrisiProjekatForma.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(rootPane, "Sistem ne može da zapamti projekat.", "Doslo je do greske!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(rootPane, "Sistem ne može da zapamti projekat.", lokalizacija.JezikMenadzer.get("dosloJeDoGreske"), JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnIzmeniProjekatActionPerformed
 
@@ -480,7 +494,7 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
             ModelTabeleProjekti mtp = (ModelTabeleProjekti) tblProjekti.getModel();
             mtp.setListaProjekata(listaSvihProjekata);
         } else if(listaSvihProjekata.size() == 0) {
-            JOptionPane.showMessageDialog(rootPane, "Ne postoji nijedan projekat.");
+            JOptionPane.showMessageDialog(rootPane, lokalizacija.JezikMenadzer.get("nePostojiNijedanProjekat"));
             this.dispose();
         } else {
             JOptionPane.showMessageDialog(rootPane, "Doslo je do greske prilikom pretrage projekata.");
@@ -529,13 +543,13 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
         
         String naziv = txtNazivProjekta.getText().trim();
             if (naziv.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Polje Naziv ne sme biti prazno.", "Greska pri izmeni projekta!", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, lokalizacija.JezikMenadzer.get("nezivNeSmePrazno"), lokalizacija.JezikMenadzer.get("greskaPriIzmeniProjekta"), JOptionPane.ERROR_MESSAGE);
                 return false;
             }
         izmenjeniProjekat.setNazivProjekta(naziv);
         
         if(txtPocetakRealizacijeProjekta.getText().contains(" ")){
-                JOptionPane.showMessageDialog(null, "Polje Početak realizacije ne sme biti prazno.", "Greska pri izmeni projekta!", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, lokalizacija.JezikMenadzer.get("pocetakRealizacijeNeSmePrazno"), lokalizacija.JezikMenadzer.get("greskaPriIzmeniProjekta"), JOptionPane.ERROR_MESSAGE);
                 return false;
         }
             
@@ -551,7 +565,7 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
         LinkedList<Zaposleni> listaZaposlenihProvera = izmenjeniProjekat.getZaposleni();
         
         if(listaZaposlenihProvera.size() == 0){
-            int izbor = JOptionPane.showConfirmDialog(this, "Niste dodali nijednog zaposlenog. Da li zelite da sačuvate projekat bez zaposlenih?", "Čuvanje projekta", JOptionPane.YES_NO_OPTION);
+            int izbor = JOptionPane.showConfirmDialog(this, lokalizacija.JezikMenadzer.get("bezZaposlenihPitanje"), lokalizacija.JezikMenadzer.get("cuvanjeProjekta"), JOptionPane.YES_NO_OPTION);
 
             if (izbor == JOptionPane.YES_OPTION) {
                 return true;
@@ -566,5 +580,36 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
         for (Stanje stanje : Stanje.values()) {
             cmbStanjeProjekta.addItem(stanje);
         }
+    }
+    
+    private void osveziLokalizaciju() {
+        javax.swing.border.Border border = jPanel1.getBorder();
+        if (border instanceof javax.swing.border.TitledBorder) {
+            javax.swing.border.TitledBorder titledBorder = (javax.swing.border.TitledBorder) border;
+            titledBorder.setTitle(lokalizacija.JezikMenadzer.get("pronadjiProjekat"));
+            jPanel1.repaint();
+        }
+        javax.swing.border.Border border2 = jPanel2.getBorder();
+        if (border2 instanceof javax.swing.border.TitledBorder) {
+            javax.swing.border.TitledBorder titledBorder2 = (javax.swing.border.TitledBorder) border2;
+            titledBorder2.setTitle(lokalizacija.JezikMenadzer.get("ucitaniProjekat"));
+            jPanel2.repaint();
+        }
+        btnPronadjiProjekat.setText(lokalizacija.JezikMenadzer.get("pronadji"));
+        jLabel2.setText(lokalizacija.JezikMenadzer.get("id") + ':');
+        lblNazivProjekta.setText(lokalizacija.JezikMenadzer.get("nazivProjekta") + ':');
+        lblNazivProjekta1.setText(lokalizacija.JezikMenadzer.get("pocetakRealizacije") + ':');
+        lblRukovodilacProjekta.setText(lokalizacija.JezikMenadzer.get("rukovodilacProjekta") + ':');
+        lblPrioritetProjekta.setText(lokalizacija.JezikMenadzer.get("prioritetProjekta") + ':');
+        jLabel3.setText(lokalizacija.JezikMenadzer.get("stanjeProjekta") + ':');
+        jLabel1.setText(lokalizacija.JezikMenadzer.get("zaposleni") + ':');
+        btnDodajZaposlenog.setText(lokalizacija.JezikMenadzer.get("dodaj"));
+        btnObrisiZaposlenog.setText(lokalizacija.JezikMenadzer.get("obrisi"));
+        btnObrisiProjekat.setText(lokalizacija.JezikMenadzer.get("obrisiProjekat"));
+        btnIzmeniProjekat.setText(lokalizacija.JezikMenadzer.get("izmeniProjekat"));
+        UIManager.put("OptionPane.yesButtonText", lokalizacija.JezikMenadzer.get("da"));
+        UIManager.put("OptionPane.noButtonText", lokalizacija.JezikMenadzer.get("ne"));
+        UIManager.put("OptionPane.okButtonText", lokalizacija.JezikMenadzer.get("ok"));
+        UIManager.put("OptionPane.cancelButtonText", lokalizacija.JezikMenadzer.get("cancel"));
     }
 }

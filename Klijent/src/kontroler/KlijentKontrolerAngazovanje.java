@@ -30,7 +30,12 @@ public class KlijentKontrolerAngazovanje extends OpstiKlijentskiKontroler{
     }
 
     public LinkedList<Angazovanje> vratiAngazovanja() throws Exception {
-        return (LinkedList<Angazovanje>) posaljiZahtev(Operacije.VRATI_ANGAZOVANJA, null);
+        String koristiJSON = transfer.Transfer.getKoristiJSON();
+        if(koristiJSON.equals("true")){
+            return (LinkedList<Angazovanje>) posaljiZahtevZaListuJSON(Operacije.VRATI_ANGAZOVANJA, null, Angazovanje.class);
+        } else {
+            return (LinkedList<Angazovanje>) posaljiZahtev(Operacije.VRATI_ANGAZOVANJA, null);
+        }
     }
     
     

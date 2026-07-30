@@ -5,6 +5,7 @@
 package modeli;
 
 import domen.Projekat;
+import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import javax.swing.table.AbstractTableModel;
 
@@ -16,6 +17,8 @@ public class ModelTabeleProjekti extends AbstractTableModel {
 
     LinkedList<Projekat> listaProjekata = new LinkedList<>();
     String[] kolone = {"Naziv","Pocetak Realizacije","Rukovodilac","Prioritet", "Stanje"};
+    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy.");
+    private String odabirJezika = lokalizacija.JezikMenadzer.getOdabir();
 
     public void setListaProjekata(LinkedList<Projekat> listaProjekata) {
         this.listaProjekata = listaProjekata;
@@ -34,6 +37,19 @@ public class ModelTabeleProjekti extends AbstractTableModel {
 
     @Override
     public String getColumnName(int column) {
+        switch (odabirJezika) {
+            case "srpski - latinica":
+                kolone = new String[]{"Naziv","Pocetak Realizacije","Rukovodilac","Prioritet", "Stanje"};
+                break;
+            case "srpski - cirilica":
+                kolone = new String[]{"Назив","Почетак Реализације","Руководилац","Приоритет", "Стање"};
+                break;
+            case "english":
+                kolone = new String[]{"Name","Start Date","Lead","Priority", "State"};
+                break;
+            default:
+                throw new AssertionError();
+        }
         return kolone[column];
     }
 
@@ -44,7 +60,9 @@ public class ModelTabeleProjekti extends AbstractTableModel {
             case 0:
                 return projekat.getNazivProjekta();
             case 1:
-                return projekat.getPocetakRealizacije();
+                if (projekat.getPocetakRealizacije() != null) {
+                    return sdf.format(projekat.getPocetakRealizacije());
+                }
             case 2:
                 return projekat.getRukovodilac();
             case 3:

@@ -1,28 +1,57 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package forme;
 
+import domen.Angazovanje;
+import domen.Projekat;
 import forme.projekti.DodajProjekatForma;
 import forme.projekti.ObrisiProjekatForma;
 import forme.zaposleni.DodajZaposlenogForma;
 import forme.zaposleni.IzmeniZaposlenogForma;
+import java.awt.BorderLayout;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.Map;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import kontroler.KlijentKontrolerAdministrator;
+import kontroler.KlijentKontrolerAngazovanje;
+import kontroler.KlijentKontrolerProjekat;
 import sesija.Sesija;
-
+import org.knowm.xchart.CategoryChart;
+import org.knowm.xchart.CategoryChartBuilder;
+import org.knowm.xchart.PieChart;
+import org.knowm.xchart.PieChartBuilder;
+import org.knowm.xchart.XChartPanel;
 /**
  *
  * @author Mihajlo
  */
 public class GlavnaForma extends javax.swing.JFrame{
 
+    private XChartPanel<CategoryChart> chartPanel;
+    private CategoryChart chart;
+    
+    private XChartPanel<PieChart> pieChartPanel;
+    private PieChart pieChart;
+    private javax.swing.JPanel panelZaGrafikone;
     /**
      * Creates new form GlavnaForma
      */
     public GlavnaForma() throws Exception {
         initComponents();
+        Locale latinica = new Locale.Builder()
+                        .setLanguage("sr")
+                        .setScript("Latn")
+                        .build();
+
+        lokalizacija.JezikMenadzer.setLocale(latinica);
+        osveziLokalizaciju();
+        this.getContentPane().setLayout(new BorderLayout());
+        lblUlogovani.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        this.getContentPane().add(lblUlogovani, BorderLayout.NORTH);
+        panelZaGrafikone = new javax.swing.JPanel(new java.awt.GridLayout(1, 2, 10, 0));
+        this.getContentPane().add(panelZaGrafikone, BorderLayout.CENTER);
+        iscrtajGrafike();
         setLocationRelativeTo(null);
         lblUlogovani.setText("Administrator: " + Sesija.getInstanca().getUlogovani());
         menuAngazovanja.setVisible(false);
@@ -50,6 +79,10 @@ public class GlavnaForma extends javax.swing.JFrame{
         menuItemObrisiAngazovanje = new javax.swing.JMenuItem();
         menuOdjava = new javax.swing.JMenu();
         menuItemOdjaviSe = new javax.swing.JMenuItem();
+        jMenuJezik = new javax.swing.JMenu();
+        jMenuItemSrpskiLatinica = new javax.swing.JMenuItem();
+        jMenuItemSrpskiCirilica = new javax.swing.JMenuItem();
+        jMenuItemEnglish = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -127,6 +160,34 @@ public class GlavnaForma extends javax.swing.JFrame{
 
         jMenuBar1.add(menuOdjava);
 
+        jMenuJezik.setText("Jezik");
+
+        jMenuItemSrpskiLatinica.setText("srpski - latinica");
+        jMenuItemSrpskiLatinica.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSrpskiLatinicaActionPerformed(evt);
+            }
+        });
+        jMenuJezik.add(jMenuItemSrpskiLatinica);
+
+        jMenuItemSrpskiCirilica.setText("српски - ћирилица");
+        jMenuItemSrpskiCirilica.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSrpskiCirilicaActionPerformed(evt);
+            }
+        });
+        jMenuJezik.add(jMenuItemSrpskiCirilica);
+
+        jMenuItemEnglish.setText("english");
+        jMenuItemEnglish.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemEnglishActionPerformed(evt);
+            }
+        });
+        jMenuJezik.add(jMenuItemEnglish);
+
+        jMenuBar1.add(jMenuJezik);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -134,7 +195,7 @@ public class GlavnaForma extends javax.swing.JFrame{
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(589, Short.MAX_VALUE)
+                .addContainerGap(857, Short.MAX_VALUE)
                 .addComponent(lblUlogovani)
                 .addContainerGap())
         );
@@ -142,7 +203,7 @@ public class GlavnaForma extends javax.swing.JFrame{
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(lblUlogovani)
-                .addGap(0, 262, Short.MAX_VALUE))
+                .addGap(0, 421, Short.MAX_VALUE))
         );
 
         pack();
@@ -150,7 +211,7 @@ public class GlavnaForma extends javax.swing.JFrame{
 
     private void menuItemOdjaviSeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemOdjaviSeActionPerformed
         try{
-            int izbor = JOptionPane.showConfirmDialog(this, "Da li ste sigurni da zelite da se odjavite?", "Odjava", JOptionPane.YES_NO_OPTION);
+            int izbor = JOptionPane.showConfirmDialog(this, lokalizacija.JezikMenadzer.get("odjavaPitanje"), lokalizacija.JezikMenadzer.get("odjava"), JOptionPane.YES_NO_OPTION);
 
             if (izbor == JOptionPane.YES_OPTION) {
                 Sesija.getInstanca().setUlogovani(null);
@@ -186,12 +247,141 @@ public class GlavnaForma extends javax.swing.JFrame{
         new IzmeniZaposlenogForma(this, rootPaneCheckingEnabled).setVisible(true);
     }//GEN-LAST:event_menuItemIzmeniZaposlenogActionPerformed
 
+    private void jMenuItemSrpskiLatinicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSrpskiLatinicaActionPerformed
+        Locale latinica = new Locale.Builder()
+                        .setLanguage("sr")
+                        .setScript("Latn")
+                        .build();
+
+        lokalizacija.JezikMenadzer.setLocale(latinica);
+        lokalizacija.JezikMenadzer.setOdabir("srpski - latinica");
+        osveziLokalizaciju();
+    }//GEN-LAST:event_jMenuItemSrpskiLatinicaActionPerformed
+
+    private void jMenuItemSrpskiCirilicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSrpskiCirilicaActionPerformed
+        lokalizacija.JezikMenadzer.setLocale(Locale.of("sr"));
+        lokalizacija.JezikMenadzer.setOdabir("srpski - cirilica");
+        osveziLokalizaciju();
+    }//GEN-LAST:event_jMenuItemSrpskiCirilicaActionPerformed
+
+    private void jMenuItemEnglishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEnglishActionPerformed
+        lokalizacija.JezikMenadzer.setLocale(Locale.ENGLISH);
+        lokalizacija.JezikMenadzer.setOdabir("english");
+        osveziLokalizaciju();
+    }//GEN-LAST:event_jMenuItemEnglishActionPerformed
+
+    private void osveziLokalizaciju() {
+        jMenuJezik.setText(lokalizacija.JezikMenadzer.get("jezik"));
+        menuZaposleni.setText(lokalizacija.JezikMenadzer.get("zaposleni"));
+        menuProjekti.setText(lokalizacija.JezikMenadzer.get("projekti"));
+        menuAngazovanja.setText(lokalizacija.JezikMenadzer.get("angazovanja"));
+        menuOdjava.setText(lokalizacija.JezikMenadzer.get("odjava"));
+        lblUlogovani.setText(lokalizacija.JezikMenadzer.get("administrator") + ": " + Sesija.getInstanca().getUlogovani());
+        menuItemDodajZaposlenog.setText(lokalizacija.JezikMenadzer.get("dodavanje"));
+        menuItemIzmeniZaposlenog.setText(lokalizacija.JezikMenadzer.get("izmenaIBrisanje"));
+        menuItemDodajProjekat.setText(lokalizacija.JezikMenadzer.get("dodavanje"));
+        menuItemObrisiProjekat.setText(lokalizacija.JezikMenadzer.get("izmenaIBrisanje"));
+        menuItemOdjaviSe.setText(lokalizacija.JezikMenadzer.get("odjaviSe"));
+        if (chart != null && chartPanel != null) {
+            chart.setTitle(lokalizacija.JezikMenadzer.get("brojZaposlenihPoProjektu"));
+            chart.setXAxisTitle(lokalizacija.JezikMenadzer.get("projekat"));
+            chart.setYAxisTitle(lokalizacija.JezikMenadzer.get("brojZaposlenih"));
+            chartPanel.repaint();
+        }
+        if (pieChart != null && pieChartPanel != null) {
+            pieChart.setTitle(lokalizacija.JezikMenadzer.get("stanjeProjekata"));
+            pieChartPanel.repaint();
+        }
+        UIManager.put("OptionPane.yesButtonText", lokalizacija.JezikMenadzer.get("da"));
+        UIManager.put("OptionPane.noButtonText", lokalizacija.JezikMenadzer.get("ne"));
+        UIManager.put("OptionPane.okButtonText", lokalizacija.JezikMenadzer.get("ok"));
+        UIManager.put("OptionPane.cancelButtonText", lokalizacija.JezikMenadzer.get("cancel"));
+    }
+    
+    public void iscrtajGrafike() throws Exception{
+        LinkedList<Angazovanje> listaSvihAngazovanja = KlijentKontrolerAngazovanje.getInstanca().vratiAngazovanja();
+        LinkedList<Projekat> listaSvihProjekata = KlijentKontrolerProjekat.getInstanca().vratiProjekte();
+
+        Map<Projekat, Integer> statistikaZaposleniNaProjektima = new java.util.TreeMap<>((p1, p2) -> Integer.compare(p1.getProjekatId(), p2.getProjekatId()));
+        for (Angazovanje a : listaSvihAngazovanja) {
+            if (a.getProjekat() != null) {
+                Projekat p = a.getProjekat();
+                statistikaZaposleniNaProjektima.put(p, statistikaZaposleniNaProjektima.getOrDefault(p, 0) + 1);
+            }
+        }
+
+        java.util.List<String> naziviProjekata = new java.util.ArrayList<>();
+        java.util.List<Number> brojZaposlenih = new java.util.ArrayList<>();
+        
+        for (Map.Entry<Projekat, Integer> entry : statistikaZaposleniNaProjektima.entrySet()) {
+            naziviProjekata.add(entry.getKey().getNazivProjekta());
+            brojZaposlenih.add(entry.getValue());
+        }
+
+        chart = new CategoryChartBuilder()
+                .width(800)
+                .height(500)
+                .title(lokalizacija.JezikMenadzer.get("brojZaposlenihPoProjektu"))
+                .xAxisTitle(lokalizacija.JezikMenadzer.get("projekat"))
+                .yAxisTitle(lokalizacija.JezikMenadzer.get("brojZaposlenih"))
+                .build();
+
+        chart.getStyler().setLegendVisible(false);
+        chart.getStyler().setYAxisDecimalPattern("#");
+
+        if (!naziviProjekata.isEmpty()) {
+            chart.addSeries("Zaposleni", naziviProjekata, brojZaposlenih);
+        }
+       
+        
+        Map<String, Integer> statistikaStanjaProjekata = new HashMap<>();
+
+        for (Projekat p : listaSvihProjekata) {
+            if (p.getStanje() != null) {
+                String stanjeNaziv = p.getStanje().toString(); 
+                statistikaStanjaProjekata.put(stanjeNaziv, statistikaStanjaProjekata.getOrDefault(stanjeNaziv, 0) + 1);
+            }
+        }
+
+        pieChart = new PieChartBuilder()
+            .width(400)
+            .height(500)
+            .title(lokalizacija.JezikMenadzer.get("stanjeProjekata"))
+            .build();
+
+        pieChart.getStyler().setLegendVisible(false);
+        pieChart.getStyler().setLabelsVisible(true);
+        pieChart.getStyler().setLabelType(org.knowm.xchart.style.PieStyler.LabelType.NameAndPercentage);
+        pieChart.getStyler().setLabelsDistance(0.6); 
+        pieChart.getStyler().setLabelsFont(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 12));
+
+        for (Map.Entry<String, Integer> entry : statistikaStanjaProjekata.entrySet()) {
+            pieChart.addSeries(entry.getKey(), (Number) entry.getValue());
+        }
+
+
+        panelZaGrafikone.removeAll();
+
+        chartPanel = new XChartPanel<>(chart);
+        pieChartPanel = new XChartPanel<>(pieChart);
+
+        panelZaGrafikone.add(chartPanel);
+        panelZaGrafikone.add(pieChartPanel);
+
+        this.revalidate();
+        this.repaint();
+    }
+    
     /**
      * @param args the command line arguments
      */
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem btnDodajAngazovanje;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItemEnglish;
+    private javax.swing.JMenuItem jMenuItemSrpskiCirilica;
+    private javax.swing.JMenuItem jMenuItemSrpskiLatinica;
+    private javax.swing.JMenu jMenuJezik;
     private javax.swing.JLabel lblUlogovani;
     private javax.swing.JMenu menuAngazovanja;
     private javax.swing.JMenuItem menuItemDodajProjekat;

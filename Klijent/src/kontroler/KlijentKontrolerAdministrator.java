@@ -4,6 +4,7 @@
  */
 package kontroler;
 
+import domen.Administrator;
 import transfer.Operacije;
 
 /**
@@ -25,7 +26,12 @@ public class KlijentKontrolerAdministrator extends OpstiKlijentskiKontroler{
     }
 
     public void logout() throws Exception {
-        posaljiZahtev(Operacije.LOGOUT, null);
+        String koristiJSON = transfer.Transfer.getKoristiJSON();
+        if(koristiJSON.equals("true")){
+            posaljiZahtevJSON(Operacije.LOGOUT, null, Administrator.class);
+        } else {
+            posaljiZahtev(Operacije.LOGOUT, null);
+        }
     }
 
     

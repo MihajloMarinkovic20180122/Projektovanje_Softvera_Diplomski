@@ -13,10 +13,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import kontroler.KlijentKontrolerZaposleni;
 import kontroler.OpstiKlijentskiKontroler;
 
@@ -28,17 +30,18 @@ public class DodajZaposlenogForma extends javax.swing.JDialog {
 
     /**
      * Creates new form DodajZaposlenogForma1
-     */
+     */ 
     public DodajZaposlenogForma(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         try {
             initComponents();
+            osveziLokalizaciju();
             setLocationRelativeTo(null);
-            setTitle("Dodavanje zaposlenog");
+            setTitle(lokalizacija.JezikMenadzer.get("dodavanjeZaposlenog"));
             popuniCmbOrganizacionaCelina();
         } catch (SocketException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(rootPane, "Server nije pokrenut.");
+            JOptionPane.showMessageDialog(rootPane, lokalizacija.JezikMenadzer.get("serverNijePokrenut"));
             System.exit(0);
         }
         catch (Exception ex) {
@@ -179,42 +182,42 @@ public class DodajZaposlenogForma extends javax.swing.JDialog {
         try {
             String ime = txtZaposleniIme.getText();
             if(ime.isEmpty()){
-                throw new Exception("Niste uneli ime.");
+                throw new Exception(lokalizacija.JezikMenadzer.get("nisteUneliIme"));
             }
             if(!ime.matches("^[A-ZČĆŽŠĐ][a-zčćžšđ]+$")){
-                throw new Exception("Ime nije u ispravnom formatu.");
+                throw new Exception(lokalizacija.JezikMenadzer.get("imeNijeUIspravnomFormatu"));
             }
 
             String prezime = txtZaposleniPrezime.getText();
             if(prezime.isEmpty()){
-                throw new Exception("Niste uneli prezime.");
+                throw new Exception(lokalizacija.JezikMenadzer.get("nisteUneliPrezime"));
             }
             if(!prezime.matches("^[A-ZČĆŽŠĐ][a-zčćžšđ]+$")){
-                throw new Exception("Prezime nije u ispravnom formatu.");
+                throw new Exception(lokalizacija.JezikMenadzer.get("prezimeNijeUIspravnomFormatu"));
             }
             
             String email = txtZaposleniEmail.getText().trim();
             if(email.isEmpty()){
-                throw new Exception("Niste uneli email.");
+                throw new Exception(lokalizacija.JezikMenadzer.get("nisteUneliEmail"));
             }
             if(!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
-              throw new Exception("Email nije u ispravnom formatu.");
+              throw new Exception(lokalizacija.JezikMenadzer.get("emailNijeUIspravnomFormatu"));
             }
             
             LinkedList<Zaposleni> listaZaposlenih = KlijentKontrolerZaposleni.getInstanca().vratiZaposlene();
             for (Zaposleni zaposleni : listaZaposlenih) {
                 if(zaposleni.getEmail().equals(email)){
-                    throw new Exception("Zaposleni sa tim Email-om vec postoji.");
+                    throw new Exception(lokalizacija.JezikMenadzer.get("emailVecPostoji"));
                 }
             }
             
             if(txtZaposleniDatumZaposlenja.getText().contains(" ")){
-                throw new Exception("Niste uneli datum zaposlenja.");
+                throw new Exception(lokalizacija.JezikMenadzer.get("nisteUneliDatumZaposlenja"));
             }
             SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy.");
             Date datumZaposlenja = sdf.parse(txtZaposleniDatumZaposlenja.getText());
             if(datumZaposlenja.after(new Date())){
-                throw new Exception("Datum zaposlenja ne sme biti u buducnosti.");
+                throw new Exception(lokalizacija.JezikMenadzer.get("datumZaposlenjaNeSmeBitiUBuducnosti"));
             }
             
             OrganizacionaCelina organizacionaCelina = (OrganizacionaCelina) cmbOrganizacionaCelina.getSelectedItem();
@@ -224,7 +227,7 @@ public class DodajZaposlenogForma extends javax.swing.JDialog {
 
             KlijentKontrolerZaposleni.getInstanca().dodajZaposlenog(zaposleni);
             
-            JOptionPane.showMessageDialog(rootPane, "Sistem je zapamtio zaposlenog.", "Uspešno izvršeno.", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(rootPane, lokalizacija.JezikMenadzer.get("sistemJeZapamtioZaposlenog"), lokalizacija.JezikMenadzer.get("uspesnoIzvrseno"), JOptionPane.INFORMATION_MESSAGE);
 
             txtZaposleniIme.setText("");
             txtZaposleniPrezime.setText("");
@@ -235,7 +238,7 @@ public class DodajZaposlenogForma extends javax.swing.JDialog {
             
         }  catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(rootPane, ex.getMessage(), "Doslo je do greske!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(rootPane, ex.getMessage(), lokalizacija.JezikMenadzer.get("dosloJeDoGreske"), JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnDodajZaposlenogActionPerformed
 
@@ -277,8 +280,22 @@ public class DodajZaposlenogForma extends javax.swing.JDialog {
             }
         } catch(Exception ex){
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(rootPane, ex.getMessage(), "Doslo je do greske!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(rootPane, ex.getMessage(), lokalizacija.JezikMenadzer.get("dosloJeDoGreske"), JOptionPane.ERROR_MESSAGE);
         }
         
+    }
+    
+    private void osveziLokalizaciju() {
+        lblImeZaposlenog.setText(lokalizacija.JezikMenadzer.get("ime") + ':');
+        lblPrezime.setText(lokalizacija.JezikMenadzer.get("prezime") + ':');
+        lblEmail.setText(lokalizacija.JezikMenadzer.get("email") + ':');
+        lblDatumZaposlenja.setText(lokalizacija.JezikMenadzer.get("datumZaposlenja") + ':');
+        lblOrganizacionaCelina.setText(lokalizacija.JezikMenadzer.get("organizacionaCelina") + ':');
+        lblRadnoMesto.setText(lokalizacija.JezikMenadzer.get("radnoMesto") + ':');
+        btnDodajZaposlenog.setText(lokalizacija.JezikMenadzer.get("sacuvaj"));
+        UIManager.put("OptionPane.yesButtonText", lokalizacija.JezikMenadzer.get("da"));
+        UIManager.put("OptionPane.noButtonText", lokalizacija.JezikMenadzer.get("ne"));
+        UIManager.put("OptionPane.okButtonText", lokalizacija.JezikMenadzer.get("ok"));
+        UIManager.put("OptionPane.cancelButtonText", lokalizacija.JezikMenadzer.get("cancel"));
     }
 }

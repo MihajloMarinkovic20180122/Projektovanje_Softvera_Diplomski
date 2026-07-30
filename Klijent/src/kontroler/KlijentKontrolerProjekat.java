@@ -26,29 +26,66 @@ public class KlijentKontrolerProjekat extends OpstiKlijentskiKontroler{
     }
     
     public void dodajProjekat(Projekat projekat) throws Exception {
-        posaljiZahtev(Operacije.DODAJ_PROJEKAT, projekat);
+        String koristiJSON = transfer.Transfer.getKoristiJSON();
+        if(koristiJSON.equals("true")){
+            posaljiZahtevJSON(Operacije.DODAJ_PROJEKAT, projekat, Projekat.class);
+        } else {
+            posaljiZahtev(Operacije.DODAJ_PROJEKAT, projekat);
+        }
+        
     }
     
      public LinkedList<Projekat> vratiProjekte() throws Exception {
-        return (LinkedList<Projekat>) posaljiZahtev(Operacije.VRATI_PROJEKTE, null);
+        String koristiJSON = transfer.Transfer.getKoristiJSON();
+        if(koristiJSON.equals("true")){
+            return (LinkedList<Projekat>) posaljiZahtevZaListuJSON(Operacije.VRATI_PROJEKTE, null, Projekat.class);
+        } else {
+            return (LinkedList<Projekat>) posaljiZahtev(Operacije.VRATI_PROJEKTE, null);
+        }
+        
     }
 
     public LinkedList<Projekat> pronadjiPaVratiProjekte(String pretraga) throws Exception {
         Projekat projekat = new Projekat();
         projekat.setVrednostZaPretragu(pretraga);
-        return (LinkedList<Projekat>) posaljiZahtev(Operacije.VRATI_PROJEKTE_PRETRAGA, projekat);
+        
+        String koristiJSON = transfer.Transfer.getKoristiJSON();
+        if(koristiJSON.equals("true")){
+            return (LinkedList<Projekat>) posaljiZahtevZaListuJSON(Operacije.VRATI_PROJEKTE_PRETRAGA, projekat, Projekat.class);
+        } else {
+            return (LinkedList<Projekat>) posaljiZahtev(Operacije.VRATI_PROJEKTE_PRETRAGA, projekat);
+        }
+        
     }
 
     public void obrisiProjekat(Projekat projekat) throws Exception {
-        posaljiZahtev(Operacije.OBRISI_PROJEKAT, projekat);
+        String koristiJSON = transfer.Transfer.getKoristiJSON();
+        if(koristiJSON.equals("true")){
+            posaljiZahtevJSON(Operacije.OBRISI_PROJEKAT, projekat, Projekat.class);
+        } else {
+            posaljiZahtev(Operacije.OBRISI_PROJEKAT, projekat);
+        }
+        
     }
 
     public Projekat ucitajProjekat(Projekat odabraniProjekat) throws Exception {
-        return (Projekat) posaljiZahtev(Operacije.UCITAJ_PROJEKAT, odabraniProjekat);
+        String koristiJSON = transfer.Transfer.getKoristiJSON();
+        if(koristiJSON.equals("true")){
+            return (Projekat) posaljiZahtevJSON(Operacije.UCITAJ_PROJEKAT, odabraniProjekat, Projekat.class);
+        } else {
+            return (Projekat) posaljiZahtev(Operacije.UCITAJ_PROJEKAT, odabraniProjekat);
+        }
+        
     }
 
     public void izmeniProjekat(Projekat izmenjeniProjekat) throws Exception {
-        posaljiZahtev(Operacije.IZMENI_PODATKE_PROJEKTA, izmenjeniProjekat);
+        String koristiJSON = transfer.Transfer.getKoristiJSON();
+        if(koristiJSON.equals("true")){
+            posaljiZahtevJSON(Operacije.IZMENI_PODATKE_PROJEKTA, izmenjeniProjekat, Projekat.class);
+        } else {
+            posaljiZahtev(Operacije.IZMENI_PODATKE_PROJEKTA, izmenjeniProjekat);
+        }
+        
     }
     
 }

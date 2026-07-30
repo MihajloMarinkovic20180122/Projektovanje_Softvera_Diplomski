@@ -5,6 +5,7 @@
 package modeli;
 
 import domen.Angazovanje;
+import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import javax.swing.table.AbstractTableModel;
 
@@ -16,6 +17,8 @@ public class ModelTabeleAngazovanje extends AbstractTableModel{
 
     LinkedList<Angazovanje> listaAngazovanja = new LinkedList<>();
     String[] kolone = {"Zaposleni","Projekat","Pocetak Angazovanja","Kraj Angazovanja"};
+    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy.");
+    private String odabirJezika = lokalizacija.JezikMenadzer.getOdabir();
 
     public void setListaAngazovanje(LinkedList<Angazovanje> listaAngazovanje) {
         this.listaAngazovanja = listaAngazovanje;
@@ -34,6 +37,19 @@ public class ModelTabeleAngazovanje extends AbstractTableModel{
 
     @Override
     public String getColumnName(int column) {
+        switch (odabirJezika) {
+            case "srpski - latinica":
+                kolone = new String[]{"Zaposleni","Projekat","Pocetak Angazovanja","Kraj Angazovanja"};
+                break;
+            case "srpski - cirilica":
+                kolone = new String[]{"Запослени","Пројекат","Почетак Ангажовања","Крај Ангажовања"};
+                break;
+            case "english":
+                kolone = new String[]{"Employee","Project","Start Date","End Date"};
+                break;
+            default:
+                throw new AssertionError();
+        }
         return kolone[column];
     }
 
@@ -46,9 +62,13 @@ public class ModelTabeleAngazovanje extends AbstractTableModel{
             case 1:
                 return angazovanje.getProjekat();
             case 2:
-                return angazovanje.getPocetakAngazovanja();
+                if (angazovanje.getPocetakAngazovanja() != null) {
+                    return sdf.format(angazovanje.getPocetakAngazovanja());
+                }
             case 3:
-                return angazovanje.getKrajAngazovanja();
+                if (angazovanje.getKrajAngazovanja() != null) {
+                    return sdf.format(angazovanje.getKrajAngazovanja());
+                }
             default:
                 return "";
         }
