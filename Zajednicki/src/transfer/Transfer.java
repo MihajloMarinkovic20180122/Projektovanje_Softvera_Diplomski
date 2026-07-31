@@ -4,12 +4,9 @@
  */
 package transfer;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import java.util.ResourceBundle;
 
 /**
  *
@@ -17,7 +14,7 @@ import java.util.ResourceBundle;
  */
 public class Transfer {
     
-    private static String koristiJSON;
+    private static String format;
 
     static {
         Properties parametriTransfera = new Properties();
@@ -25,20 +22,20 @@ public class Transfer {
         try (InputStream is = Transfer.class.getClassLoader().getResourceAsStream("transfer/transfer.properties")) {
             if (is != null) {
                 parametriTransfera.load(is);
-                koristiJSON = parametriTransfera.getProperty("koristiJSON");
+                format = parametriTransfera.getProperty("format");
             } else {
                 System.err.println("Fajl transfer.properties nije pronađen u paketu!");
-                koristiJSON = "false";
+                format = "false";
             }
         } catch (IOException e) {
             System.err.println("Greška pri čitanju transfer.properties fajla!");
             e.printStackTrace();
-            koristiJSON = "false"; 
+            format = "false"; 
         }
     }
     
-    public static String getKoristiJSON() {
-        return koristiJSON;
+    public static String getFormat() {
+        return format;
     }
     
 }

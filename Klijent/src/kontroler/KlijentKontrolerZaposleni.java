@@ -29,89 +29,42 @@ public class KlijentKontrolerZaposleni extends OpstiKlijentskiKontroler{
     }
     
     public LinkedList<OrganizacionaCelina> vratiOrganizacioneCeline() throws Exception {
-        String koristiJSON = transfer.Transfer.getKoristiJSON();
-        if(koristiJSON.equals("true")){
-            return (LinkedList<OrganizacionaCelina>) posaljiZahtevZaListuJSON(Operacije.VRATI_ORGANIZACIONE_CELINE, null, OrganizacionaCelina.class);
-        } else {
-            return (LinkedList<OrganizacionaCelina>) posaljiZahtev(Operacije.VRATI_ORGANIZACIONE_CELINE, null);
-        }
+        return posaljiZahtevZaListu(Operacije.VRATI_ORGANIZACIONE_CELINE, null, OrganizacionaCelina.class);
     }
 
     public LinkedList<RadnoMesto> vratiRadnaMesta(OrganizacionaCelina organizacionaCelina) throws Exception {
-        String koristiJSON = transfer.Transfer.getKoristiJSON();
-        if(koristiJSON.equals("true")){
-            return (LinkedList<RadnoMesto>) posaljiZahtevZaListuJSON(Operacije.VRATI_RADNA_MESTA, organizacionaCelina, RadnoMesto.class);
-        } else {
-            return (LinkedList<RadnoMesto>) posaljiZahtev(Operacije.VRATI_RADNA_MESTA, organizacionaCelina);
-        }
+        return posaljiZahtevZaListu(Operacije.VRATI_RADNA_MESTA, organizacionaCelina, RadnoMesto.class);
     }
 
     public void dodajZaposlenog(Zaposleni zaposleni) throws Exception {
-        String koristiJSON = transfer.Transfer.getKoristiJSON();
-        if(koristiJSON.equals("true")){
-            posaljiZahtevJSON(Operacije.DODAJ_ZAPOSLENOG, zaposleni, Zaposleni.class);
-        } else {
-            posaljiZahtev(Operacije.DODAJ_ZAPOSLENOG, zaposleni);
-        }
+        posaljiZahtev(Operacije.DODAJ_ZAPOSLENOG, zaposleni, Zaposleni.class);
     }
 
     public LinkedList<Zaposleni> vratiZaposlene() throws Exception {
-        String koristiJSON = transfer.Transfer.getKoristiJSON();
-        if(koristiJSON.equals("true")){
-            return (LinkedList<Zaposleni>) posaljiZahtevZaListuJSON(Operacije.VRATI_ZAPOSLENE, null, Zaposleni.class);
-        } else {
-            return (LinkedList<Zaposleni>) posaljiZahtev(Operacije.VRATI_ZAPOSLENE, null);
-        }
+        return posaljiZahtevZaListu(Operacije.VRATI_ZAPOSLENE, null, Zaposleni.class);
     }
     
     public LinkedList<Zaposleni> pronadjiPaVratiZaposlene(String pretraga) throws Exception {
         Zaposleni zaposleni = new Zaposleni();
         zaposleni.setVrednostZaPretragu(pretraga);
         
-        String koristiJSON = transfer.Transfer.getKoristiJSON();
-        if(koristiJSON.equals("true")){
-            return (LinkedList<Zaposleni>) posaljiZahtevZaListuJSON(Operacije.VRATI_ZAPOSLENE_PRETRAGA, zaposleni, Zaposleni.class);
-        } else {
-            return (LinkedList<Zaposleni>) posaljiZahtev(Operacije.VRATI_ZAPOSLENE_PRETRAGA, zaposleni);
-        }
+        return posaljiZahtevZaListu(Operacije.VRATI_ZAPOSLENE_PRETRAGA, zaposleni, Zaposleni.class);
     }
 
     public void obrisiZaposlenog(Zaposleni zaposleni) throws Exception {
-        String koristiJSON = transfer.Transfer.getKoristiJSON();
-        if(koristiJSON.equals("true")){
-            posaljiZahtevJSON(Operacije.OBRISI_ZAPOSLENOG, zaposleni, Zaposleni.class);
-        } else {
-            posaljiZahtev(Operacije.OBRISI_ZAPOSLENOG, zaposleni);
-        }
+        posaljiZahtev(Operacije.OBRISI_ZAPOSLENOG, zaposleni, Zaposleni.class);
     }
 
     public Zaposleni ucitajZaposlenog(Zaposleni odabraniZaposleni) throws Exception {
-        String koristiJSON = transfer.Transfer.getKoristiJSON();
-        if(koristiJSON.equals("true")){
-            return (Zaposleni) posaljiZahtevJSON(Operacije.UCITAJ_ZAPOSLENOG, odabraniZaposleni, Zaposleni.class);
-        } else {
-            return (Zaposleni) posaljiZahtev(Operacije.UCITAJ_ZAPOSLENOG, odabraniZaposleni);
-        }
+        return posaljiZahtev(Operacije.UCITAJ_ZAPOSLENOG, odabraniZaposleni, Zaposleni.class);
     }
 
     public void izmeniZaposlenog(Zaposleni izmenjenZaposleni) throws Exception {
-        String koristiJSON = transfer.Transfer.getKoristiJSON();
-        if(koristiJSON.equals("true")){
-            posaljiZahtevJSON(Operacije.IZMENI_PODATKE_ZAPOSLENOG, izmenjenZaposleni, Zaposleni.class);
-        } else {
-            posaljiZahtev(Operacije.IZMENI_PODATKE_ZAPOSLENOG, izmenjenZaposleni);
-        }
+        posaljiZahtev(Operacije.IZMENI_PODATKE_ZAPOSLENOG, izmenjenZaposleni, Zaposleni.class);
     }
 
     public LinkedList<Angazovanje> vratiAngazovanjaZaposleog(Zaposleni ucitaniZaposleni) throws Exception {
-        String koristiJSON = transfer.Transfer.getKoristiJSON();
-        if(koristiJSON.equals("true")){
-            return (LinkedList<Angazovanje>) posaljiZahtevZaListuJSON(Operacije.VRATI_ANGAZOVANJA_ZAPOSLENOG, ucitaniZaposleni, Angazovanje.class);
-        } else {
-            return (LinkedList<Angazovanje>) posaljiZahtev(Operacije.VRATI_ANGAZOVANJA_ZAPOSLENOG, ucitaniZaposleni);
-        }
+        return posaljiZahtevZaListu(Operacije.VRATI_ANGAZOVANJA_ZAPOSLENOG, ucitaniZaposleni, Angazovanje.class);
     }
-
-    
     
 }

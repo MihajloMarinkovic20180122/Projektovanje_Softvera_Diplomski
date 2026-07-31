@@ -26,16 +26,11 @@ public class KlijentKontrolerAngazovanje extends OpstiKlijentskiKontroler{
     }
     
     public void dodajAngazovanje(Angazovanje angazovanje) throws Exception {
-        posaljiZahtev(Operacije.DODAJ_ANGAZOVANJE, angazovanje);
+        posaljiZahtev(Operacije.DODAJ_ANGAZOVANJE, angazovanje, Angazovanje.class);
     }
 
     public LinkedList<Angazovanje> vratiAngazovanja() throws Exception {
-        String koristiJSON = transfer.Transfer.getKoristiJSON();
-        if(koristiJSON.equals("true")){
-            return (LinkedList<Angazovanje>) posaljiZahtevZaListuJSON(Operacije.VRATI_ANGAZOVANJA, null, Angazovanje.class);
-        } else {
-            return (LinkedList<Angazovanje>) posaljiZahtev(Operacije.VRATI_ANGAZOVANJA, null);
-        }
+        return posaljiZahtevZaListu(Operacije.VRATI_ANGAZOVANJA, null, Angazovanje.class);
     }
     
     
