@@ -50,6 +50,9 @@ public class SOIzmeniProjekat extends SOOpsteIzvrsenje{
                 listaAngazovanjaZaProjekat.add(angazovanje1);
             }
         }
+        if(izmenjeniProjekat.getStanje() == Stanje.Otkazan || izmenjeniProjekat.getStanje() == Stanje.Realizovan){
+            izmenjeniProjekat.setKrajRealizacije(new Date());
+        }
         boolean projekatIzmenjen = dbb.izmeni(odo);
         boolean angazovanjaIzmenjena = true;
         if(projekatIzmenjen){

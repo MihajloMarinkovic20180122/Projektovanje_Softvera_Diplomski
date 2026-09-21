@@ -52,9 +52,13 @@ public class SOObrisiProjekat extends SOOpsteIzvrsenje{
         }
         
         for (Angazovanje angazovanje : listaAngazovanjaZaProjekat) {
-            angazovanjaObrisana = dbb.obrisi(angazovanje);
+            //angazovanjaObrisana = dbb.obrisi(angazovanje);
+            angazovanje.setDaLiJeObrisan(true);
+            angazovanjaObrisana = dbb.izmeni(angazovanje);
         }
-        boolean projekatObrisan = dbb.obrisi(odo);
+        //boolean projekatObrisan = dbb.obrisi(odo);
+        projekatZaBrisanje.setDaLiJeObrisan(true);
+        boolean projekatObrisan = dbb.izmeni(odo);
         
         return projekatObrisan && angazovanjaObrisana;
     }

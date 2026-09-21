@@ -36,6 +36,8 @@ public class IzmeniZaposlenogForma extends javax.swing.JDialog {
         super(parent, modal);
         try {
            initComponents();
+           jLabel1.setVisible(false);
+           txtZaposleniID.setVisible(false);
            if(lokalizacija.JezikMenadzer.getOdabir() == null){
                lokalizacija.JezikMenadzer.setOdabir("srpski - latinica");
            }
@@ -49,7 +51,7 @@ public class IzmeniZaposlenogForma extends javax.swing.JDialog {
            tblZaposleni.setModel(mtz);
            mta = new ModelTabeleAngazovanje();
            tblAngazovanjaZaposlenih.setModel(mta);
-           popuniTabeluSvimZaposlenim();
+           popuniTabeluSvimZaposlenim(false);
            popuniCmbOrganizacionaCelina();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -67,9 +69,10 @@ public class IzmeniZaposlenogForma extends javax.swing.JDialog {
 
         panelPronadjiZaposlenog = new javax.swing.JPanel();
         txtPretragaZaposlenog = new javax.swing.JTextField();
-        btnPronadjiZaposlenog = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblZaposleni = new javax.swing.JTable();
+        cBoxPrikaziObrisane = new javax.swing.JCheckBox();
+        btnPronadjiZaposlenog = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         btnIzmeniZaposlenog = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -94,13 +97,6 @@ public class IzmeniZaposlenogForma extends javax.swing.JDialog {
 
         panelPronadjiZaposlenog.setBorder(javax.swing.BorderFactory.createTitledBorder("Pronađi zaposlenog"));
 
-        btnPronadjiZaposlenog.setText("Pronađi");
-        btnPronadjiZaposlenog.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPronadjiZaposlenogActionPerformed(evt);
-            }
-        });
-
         tblZaposleni.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -119,18 +115,36 @@ public class IzmeniZaposlenogForma extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(tblZaposleni);
 
+        cBoxPrikaziObrisane.setText("Prikaži obrisane");
+        cBoxPrikaziObrisane.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cBoxPrikaziObrisaneActionPerformed(evt);
+            }
+        });
+
+        btnPronadjiZaposlenog.setText("Pronađi");
+        btnPronadjiZaposlenog.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPronadjiZaposlenogActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelPronadjiZaposlenogLayout = new javax.swing.GroupLayout(panelPronadjiZaposlenog);
         panelPronadjiZaposlenog.setLayout(panelPronadjiZaposlenogLayout);
         panelPronadjiZaposlenogLayout.setHorizontalGroup(
             panelPronadjiZaposlenogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPronadjiZaposlenogLayout.createSequentialGroup()
+            .addGroup(panelPronadjiZaposlenogLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelPronadjiZaposlenogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelPronadjiZaposlenogLayout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 569, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 2, Short.MAX_VALUE))
+                    .addGroup(panelPronadjiZaposlenogLayout.createSequentialGroup()
                         .addComponent(txtPretragaZaposlenog)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnPronadjiZaposlenog))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnPronadjiZaposlenog)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cBoxPrikaziObrisane)))
                 .addContainerGap())
         );
         panelPronadjiZaposlenogLayout.setVerticalGroup(
@@ -139,6 +153,7 @@ public class IzmeniZaposlenogForma extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(panelPronadjiZaposlenogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtPretragaZaposlenog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cBoxPrikaziObrisane)
                     .addComponent(btnPronadjiZaposlenog))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
@@ -292,26 +307,20 @@ public class IzmeniZaposlenogForma extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(537, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panelPronadjiZaposlenog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(panelPronadjiZaposlenog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(598, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelPronadjiZaposlenog, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addContainerGap()))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -320,7 +329,8 @@ public class IzmeniZaposlenogForma extends javax.swing.JDialog {
     private void btnPronadjiZaposlenogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPronadjiZaposlenogActionPerformed
         try {
             String pretraga = txtPretragaZaposlenog.getText();
-            LinkedList<Zaposleni> listaZaposlenihIzPretrage = KlijentKontrolerZaposleni.getInstanca().pronadjiPaVratiZaposlene(pretraga);
+            boolean prikaziObrisane = cBoxPrikaziObrisane.isSelected();
+            LinkedList<Zaposleni> listaZaposlenihIzPretrage = KlijentKontrolerZaposleni.getInstanca().pronadjiPaVratiZaposlene(pretraga, prikaziObrisane);
             ModelTabeleZaposleni mtz = (ModelTabeleZaposleni) tblZaposleni.getModel();
             mtz.setListaZaposlenih(listaZaposlenihIzPretrage);
             LinkedList<Zaposleni> vracenaLista = mtz.vratiListu();
@@ -347,6 +357,27 @@ public class IzmeniZaposlenogForma extends javax.swing.JDialog {
                 popuniPodatkeUcitanogZaposlenog(ucitaniZaposleni);
                 btnIzmeniZaposlenog.setEnabled(true);
                 btnObrisiZaposlenog.setEnabled(true);
+                if(odabraniZaposleni.getDaLiJeObrisan()){
+                    txtZaposleniIme.setEnabled(false);
+                    txtZaposleniPrezime.setEnabled(false);
+                    txtZaposleniEmail.setEnabled(false);
+                    txtZaposleniDatumZaposlenja.setEnabled(false);
+                    cmbZaposleniOrganizacionaCelina.setEnabled(false);
+                    cmbZaposleniRadnoMesto.setEnabled(false);
+                    btnIzmeniZaposlenog.setEnabled(false);
+                    btnObrisiZaposlenog.setEnabled(false);
+                    tblAngazovanjaZaposlenih.setEnabled(false);
+                } else {
+                    txtZaposleniIme.setEnabled(true);
+                    txtZaposleniPrezime.setEnabled(true);
+                    txtZaposleniEmail.setEnabled(true);
+                    txtZaposleniDatumZaposlenja.setEnabled(true);
+                    cmbZaposleniOrganizacionaCelina.setEnabled(true);
+                    cmbZaposleniRadnoMesto.setEnabled(true);
+                    btnIzmeniZaposlenog.setEnabled(true);
+                    btnObrisiZaposlenog.setEnabled(true);
+                    tblAngazovanjaZaposlenih.setEnabled(true);
+                }
                 JOptionPane.showMessageDialog(rootPane, lokalizacija.JezikMenadzer.get("uspesnoUcitaoZaposlenog"), lokalizacija.JezikMenadzer.get("uspesnoIzvrseno"), JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (Exception ex){
@@ -354,7 +385,7 @@ public class IzmeniZaposlenogForma extends javax.swing.JDialog {
                 ex.printStackTrace();
                 //JOptionPane.showMessageDialog(rootPane, ex.getMessage(), "Doslo je do greske!", JOptionPane.ERROR_MESSAGE);
                 JOptionPane.showMessageDialog(rootPane, "Zaposleni " + odabraniZaposleni + " je obrisan.", "Doslo je do greske.", JOptionPane.INFORMATION_MESSAGE);
-                LinkedList<Zaposleni> listaSvihZaposlnih = KlijentKontrolerZaposleni.getInstanca().vratiZaposlene();
+                LinkedList<Zaposleni> listaSvihZaposlnih = KlijentKontrolerZaposleni.getInstanca().vratiZaposlene(false);
                 if (listaSvihZaposlnih.size() > 0) {
                     ModelTabeleZaposleni mtz = (ModelTabeleZaposleni) tblZaposleni.getModel();
                     mtz.setListaZaposlenih(listaSvihZaposlnih);
@@ -372,7 +403,7 @@ public class IzmeniZaposlenogForma extends javax.swing.JDialog {
         try {
             KlijentKontrolerZaposleni.getInstanca().obrisiZaposlenog(odabraniZaposleni);
             JOptionPane.showMessageDialog(rootPane, lokalizacija.JezikMenadzer.get("obrisaoZaposlenog") + ": " + odabraniZaposleni, lokalizacija.JezikMenadzer.get("uspesnoIzvrseno"), JOptionPane.INFORMATION_MESSAGE);
-            LinkedList<Zaposleni> listaSvihZaposlnih = KlijentKontrolerZaposleni.getInstanca().vratiZaposlene();
+            LinkedList<Zaposleni> listaSvihZaposlnih = KlijentKontrolerZaposleni.getInstanca().vratiZaposlene(false);
             if (listaSvihZaposlnih.size() > 0) {
                 ModelTabeleZaposleni mtz = (ModelTabeleZaposleni) tblZaposleni.getModel();
                 mtz.setListaZaposlenih(listaSvihZaposlnih);
@@ -416,7 +447,7 @@ public class IzmeniZaposlenogForma extends javax.swing.JDialog {
             if (proveriNovePodatke(izmenjenZaposleni)) {
                 KlijentKontrolerZaposleni.getInstanca().izmeniZaposlenog(izmenjenZaposleni);
                 JOptionPane.showMessageDialog(rootPane, lokalizacija.JezikMenadzer.get("zapamtioZaposlenog"), lokalizacija.JezikMenadzer.get("uspesnoIzvrseno"), JOptionPane.INFORMATION_MESSAGE);
-                LinkedList<Zaposleni> listaSvihZaposlnih = KlijentKontrolerZaposleni.getInstanca().vratiZaposlene();
+                LinkedList<Zaposleni> listaSvihZaposlnih = KlijentKontrolerZaposleni.getInstanca().vratiZaposlene(false);
                 ModelTabeleZaposleni mtz = (ModelTabeleZaposleni) tblZaposleni.getModel();
                 mtz.setListaZaposlenih(listaSvihZaposlnih);
                 btnObrisiZaposlenog.setEnabled(false);
@@ -428,6 +459,15 @@ public class IzmeniZaposlenogForma extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btnIzmeniZaposlenogActionPerformed
 
+    private void cBoxPrikaziObrisaneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cBoxPrikaziObrisaneActionPerformed
+        try {
+            boolean prikaziObrisane = cBoxPrikaziObrisane.isSelected();
+            popuniTabeluSvimZaposlenim(prikaziObrisane);
+        } catch (Exception ex) {
+            Logger.getLogger(IzmeniZaposlenogForma.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_cBoxPrikaziObrisaneActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -435,6 +475,7 @@ public class IzmeniZaposlenogForma extends javax.swing.JDialog {
     private javax.swing.JButton btnIzmeniZaposlenog;
     private javax.swing.JButton btnObrisiZaposlenog;
     private javax.swing.JButton btnPronadjiZaposlenog;
+    private javax.swing.JCheckBox cBoxPrikaziObrisane;
     private javax.swing.JComboBox<Object> cmbZaposleniOrganizacionaCelina;
     private javax.swing.JComboBox<Object> cmbZaposleniRadnoMesto;
     private javax.swing.JLabel jLabel1;
@@ -471,11 +512,13 @@ public class IzmeniZaposlenogForma extends javax.swing.JDialog {
         if (listaAngazovanjaZaZaposlenog.size() > 0) {
             ModelTabeleAngazovanje mta = (ModelTabeleAngazovanje) tblAngazovanjaZaposlenih.getModel();
             mta.setListaAngazovanje(listaAngazovanjaZaZaposlenog);
+        } else {
+            mta.setListaAngazovanje(new LinkedList<>());
         }
     }
 
-    private void popuniTabeluSvimZaposlenim() throws Exception {
-        LinkedList<Zaposleni> listaSvihZaposlnih = KlijentKontrolerZaposleni.getInstanca().vratiZaposlene();
+    private void popuniTabeluSvimZaposlenim(boolean prikaziObrisane) throws Exception {
+        LinkedList<Zaposleni> listaSvihZaposlnih = KlijentKontrolerZaposleni.getInstanca().vratiZaposlene(prikaziObrisane);
         if (listaSvihZaposlnih.size() > 0) {
             ModelTabeleZaposleni mtz = (ModelTabeleZaposleni) tblZaposleni.getModel();
             mtz.setListaZaposlenih(listaSvihZaposlnih);
@@ -546,7 +589,7 @@ public class IzmeniZaposlenogForma extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(null, lokalizacija.JezikMenadzer.get("emailNeispravanFormat"), lokalizacija.JezikMenadzer.get("greskaPriIzmeniZaposlenog"), JOptionPane.ERROR_MESSAGE);
                 return false;
             }
-            LinkedList<Zaposleni> listaZaposlenih = KlijentKontrolerZaposleni.getInstanca().vratiZaposlene();
+            LinkedList<Zaposleni> listaZaposlenih = KlijentKontrolerZaposleni.getInstanca().vratiZaposlene(false);
             for (Zaposleni zaposleni : listaZaposlenih) {
                 if(zaposleni.getEmail().equals(email) && zaposleni.getZaposleniId() != Integer.parseInt(txtZaposleniID.getText())){
                     JOptionPane.showMessageDialog(null, lokalizacija.JezikMenadzer.get("vecPostojiIstiMejl"), lokalizacija.JezikMenadzer.get("greskaPriIzmeniZaposlenog"), JOptionPane.ERROR_MESSAGE);
@@ -594,6 +637,7 @@ public class IzmeniZaposlenogForma extends javax.swing.JDialog {
         jLabel7.setText(lokalizacija.JezikMenadzer.get("radnoMesto") + ':');
         btnObrisiZaposlenog.setText(lokalizacija.JezikMenadzer.get("obrisiZaposlenog"));
         btnIzmeniZaposlenog.setText(lokalizacija.JezikMenadzer.get("izmeniZaposlenog"));
+        cBoxPrikaziObrisane.setText(lokalizacija.JezikMenadzer.get("prikaziObrisane"));
         UIManager.put("OptionPane.yesButtonText", lokalizacija.JezikMenadzer.get("da"));
         UIManager.put("OptionPane.noButtonText", lokalizacija.JezikMenadzer.get("ne"));
         UIManager.put("OptionPane.okButtonText", lokalizacija.JezikMenadzer.get("ok"));

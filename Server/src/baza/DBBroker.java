@@ -71,7 +71,7 @@ public class DBBroker {
     public LinkedList<OpstiDomenskiObjekat> vratiSve(OpstiDomenskiObjekat odo) throws SQLException {
         //throw new Exception("greska.");
         String upit = "SELECT * FROM " + odo.vratiNazivTabele() + " " + odo.alijas()
-                + " " + odo.join() + " ORDER BY 1";
+                + " " + odo.join() + " " + odo.vratiUslovZaPretragu() + " ORDER BY 1";
         PreparedStatement ps = konekcija.prepareStatement(upit);
         ResultSet rs = ps.executeQuery();
         return (LinkedList<OpstiDomenskiObjekat>) odo.vratiSve(rs);

@@ -78,6 +78,8 @@ public class DodajProjekatForma extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblZaposleni = new javax.swing.JTable();
         btnObrisiZaposlenog = new javax.swing.JButton();
+        lblKrajRealizacije = new javax.swing.JLabel();
+        txtKrajRealizacijeProjekta = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -131,6 +133,14 @@ public class DodajProjekatForma extends javax.swing.JDialog {
             }
         });
 
+        lblKrajRealizacije.setText("Kraj realizacije:");
+
+        try {
+            txtKrajRealizacijeProjekta.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##.##.####.")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -144,7 +154,8 @@ public class DodajProjekatForma extends javax.swing.JDialog {
                             .addComponent(lblRukovodilacProjekta)
                             .addComponent(lblPrioritetProjekta)
                             .addComponent(lblNazivProjekta)
-                            .addComponent(jLabel1))
+                            .addComponent(jLabel1)
+                            .addComponent(lblKrajRealizacije))
                         .addGap(15, 15, 15)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtNazivProjekta)
@@ -159,7 +170,8 @@ public class DodajProjekatForma extends javax.swing.JDialog {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnDodajZaposlenog, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnObrisiZaposlenog, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(btnObrisiZaposlenog, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtKrajRealizacijeProjekta)))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 708, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -174,6 +186,10 @@ public class DodajProjekatForma extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNazivProjekta1)
                     .addComponent(txtPocetakRealizacijeProjekta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtKrajRealizacijeProjekta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblKrajRealizacije))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblRukovodilacProjekta)
@@ -212,7 +228,17 @@ public class DodajProjekatForma extends javax.swing.JDialog {
             
             SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy.");
             Date datumPocetkaRealizacije = sdf.parse(txtPocetakRealizacijeProjekta.getText());
-
+            
+            Date datumKrajaRealizacije = null;
+            
+            if(!txtKrajRealizacijeProjekta.getText().contains(" ")){
+                datumKrajaRealizacije = sdf.parse(txtKrajRealizacijeProjekta.getText());
+            }
+            
+            if (datumKrajaRealizacije != null && !datumKrajaRealizacije.after(datumPocetkaRealizacije)) {
+                throw new Exception(lokalizacija.JezikMenadzer.get("krajRealizacijeMoraBitiNakonPocetka"));
+            }
+            
             Zaposleni rukovodilac = (Zaposleni) cmbRukovodilacProjekta.getSelectedItem();
 
             Prioritet prioritet = (Prioritet) cmbPrioritetProjekta.getSelectedItem();
@@ -223,7 +249,7 @@ public class DodajProjekatForma extends javax.swing.JDialog {
                 int izbor = JOptionPane.showConfirmDialog(this, lokalizacija.JezikMenadzer.get("bezZaposlenihPitanje"), lokalizacija.JezikMenadzer.get("cuvanjeProjekta"), JOptionPane.YES_NO_OPTION);
 
                 if (izbor == JOptionPane.YES_OPTION) {
-                    Projekat projekat = new Projekat(0, naziv, datumPocetkaRealizacije, rukovodilac, prioritet, Stanje.Kreiran, listaZaposlenih, null);
+                    Projekat projekat = new Projekat(0, naziv, datumPocetkaRealizacije, datumKrajaRealizacije, rukovodilac, prioritet, Stanje.Kreiran, listaZaposlenih, null, false, false);
                     KlijentKontrolerProjekat.getInstanca().dodajProjekat(projekat);
                     
                     JOptionPane.showMessageDialog(rootPane, lokalizacija.JezikMenadzer.get("sistemZapamtioProjekat"), lokalizacija.JezikMenadzer.get("uspesnoIzvrseno"), JOptionPane.INFORMATION_MESSAGE);
@@ -243,13 +269,14 @@ public class DodajProjekatForma extends javax.swing.JDialog {
                     return;
                 }
             }
-            Projekat projekat = new Projekat(0, naziv, datumPocetkaRealizacije, rukovodilac, prioritet, Stanje.Kreiran, listaZaposlenih, null);
+            Projekat projekat = new Projekat(0, naziv, datumPocetkaRealizacije, datumKrajaRealizacije, rukovodilac, prioritet, Stanje.Kreiran, listaZaposlenih, null, false, false);
             KlijentKontrolerProjekat.getInstanca().dodajProjekat(projekat);
             
             JOptionPane.showMessageDialog(rootPane, lokalizacija.JezikMenadzer.get("sistemZapamtioProjekat"), lokalizacija.JezikMenadzer.get("uspesnoIzvrseno"), JOptionPane.INFORMATION_MESSAGE);
             
             txtNazivProjekta.setText("");
             txtPocetakRealizacijeProjekta.setText("");
+            txtKrajRealizacijeProjekta.setText("");
             cmbRukovodilacProjekta.setSelectedIndex(0);
             cmbPrioritetProjekta.setSelectedIndex(0);
             cmbZaposleni.setSelectedIndex(0);
@@ -305,18 +332,20 @@ public class DodajProjekatForma extends javax.swing.JDialog {
     private javax.swing.JComboBox<Object> cmbZaposleni;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblKrajRealizacije;
     private javax.swing.JLabel lblNazivProjekta;
     private javax.swing.JLabel lblNazivProjekta1;
     private javax.swing.JLabel lblPrioritetProjekta;
     private javax.swing.JLabel lblRukovodilacProjekta;
     private javax.swing.JTable tblZaposleni;
+    private javax.swing.JFormattedTextField txtKrajRealizacijeProjekta;
     private javax.swing.JTextField txtNazivProjekta;
     private javax.swing.JFormattedTextField txtPocetakRealizacijeProjekta;
     // End of variables declaration//GEN-END:variables
 
     private void popuniCmbRukovodilac() throws Exception {
         cmbRukovodilacProjekta.removeAllItems();
-        LinkedList<Zaposleni> listaRukovodioca = KlijentKontrolerZaposleni.getInstanca().vratiZaposlene();
+        LinkedList<Zaposleni> listaRukovodioca = KlijentKontrolerZaposleni.getInstanca().vratiZaposlene(false);
         for (Zaposleni zaposleni : listaRukovodioca) {
             cmbRukovodilacProjekta.addItem(zaposleni);
         }
@@ -331,7 +360,7 @@ public class DodajProjekatForma extends javax.swing.JDialog {
 
     private void popuniCmbZaposleni() throws Exception {
         cmbZaposleni.removeAllItems();
-        LinkedList<Zaposleni> listaZaposlenih = KlijentKontrolerZaposleni.getInstanca().vratiZaposlene();
+        LinkedList<Zaposleni> listaZaposlenih = KlijentKontrolerZaposleni.getInstanca().vratiZaposlene(false);
         for (Zaposleni zaposleni : listaZaposlenih) {
             cmbZaposleni.addItem(zaposleni);
         }
@@ -340,6 +369,7 @@ public class DodajProjekatForma extends javax.swing.JDialog {
     private void osveziLokalizaciju() {
         lblNazivProjekta.setText(lokalizacija.JezikMenadzer.get("nazivProjekta") + ':');
         lblNazivProjekta1.setText(lokalizacija.JezikMenadzer.get("pocetakRealizacije") + ':');
+        lblKrajRealizacije.setText(lokalizacija.JezikMenadzer.get("krajRealizacije") + ':');
         lblRukovodilacProjekta.setText(lokalizacija.JezikMenadzer.get("rukovodilacProjekta") + ':');
         lblPrioritetProjekta.setText(lokalizacija.JezikMenadzer.get("prioritetProjekta") + ':');
         jLabel1.setText(lokalizacija.JezikMenadzer.get("zaposleniNaProjektu") + ':');

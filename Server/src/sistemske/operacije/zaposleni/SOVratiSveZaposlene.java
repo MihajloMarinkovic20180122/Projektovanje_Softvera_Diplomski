@@ -25,10 +25,12 @@ public class SOVratiSveZaposlene extends SOOpsteIzvrsenje{
 
     @Override
     public boolean izvrsiSO(OpstiDomenskiObjekat odo) throws Exception {
+        Zaposleni zaposleni = (Zaposleni) odo;
         boolean signal = false;
         
         try {
-            lista = dbb.vratiSve(new Zaposleni());
+            //lista = dbb.vratiSve(new Zaposleni());
+            lista = (LinkedList<OpstiDomenskiObjekat>) dbb.vratiSve(zaposleni);
             signal = true;
         } catch (Exception ex) {
             ex.printStackTrace();

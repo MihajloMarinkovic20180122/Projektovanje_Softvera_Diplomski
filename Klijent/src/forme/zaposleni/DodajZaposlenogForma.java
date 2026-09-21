@@ -204,7 +204,7 @@ public class DodajZaposlenogForma extends javax.swing.JDialog {
               throw new Exception(lokalizacija.JezikMenadzer.get("emailNijeUIspravnomFormatu"));
             }
             
-            LinkedList<Zaposleni> listaZaposlenih = KlijentKontrolerZaposleni.getInstanca().vratiZaposlene();
+            LinkedList<Zaposleni> listaZaposlenih = KlijentKontrolerZaposleni.getInstanca().vratiZaposlene(false);
             for (Zaposleni zaposleni : listaZaposlenih) {
                 if(zaposleni.getEmail().equals(email)){
                     throw new Exception(lokalizacija.JezikMenadzer.get("emailVecPostoji"));
@@ -223,7 +223,7 @@ public class DodajZaposlenogForma extends javax.swing.JDialog {
             OrganizacionaCelina organizacionaCelina = (OrganizacionaCelina) cmbOrganizacionaCelina.getSelectedItem();
             RadnoMesto radnoMesto = (RadnoMesto) cmbRadnoMesto.getSelectedItem();
             
-            Zaposleni zaposleni = new Zaposleni(0, ime, prezime, email, datumZaposlenja, organizacionaCelina, radnoMesto, null);
+            Zaposleni zaposleni = new Zaposleni(0, ime, prezime, email, datumZaposlenja, organizacionaCelina, radnoMesto, null, false, false);
 
             KlijentKontrolerZaposleni.getInstanca().dodajZaposlenog(zaposleni);
             

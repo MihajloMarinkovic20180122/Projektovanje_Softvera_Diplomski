@@ -25,11 +25,13 @@ public class Zaposleni implements OpstiDomenskiObjekat{
     private OrganizacionaCelina organizacionaCelina;
     private RadnoMesto radnoMesto;
     String vrednostZaPretragu;
+    private boolean daLiJeObrisan;
+    private boolean prikaziObrisane;
 
     public Zaposleni() {
     }
 
-    public Zaposleni(int zaposleniId, String ime, String prezime, String email, Date datumZaposlenja, OrganizacionaCelina organizacionaCelina, RadnoMesto radnoMesto, String vrednostZaPretragu) {
+    public Zaposleni(int zaposleniId, String ime, String prezime, String email, Date datumZaposlenja, OrganizacionaCelina organizacionaCelina, RadnoMesto radnoMesto, String vrednostZaPretragu, boolean daLiJeObrisan, boolean prikaziObrisane) {
         this.zaposleniId = zaposleniId;
         this.ime = ime;
         this.prezime = prezime;
@@ -38,6 +40,8 @@ public class Zaposleni implements OpstiDomenskiObjekat{
         this.organizacionaCelina = organizacionaCelina;
         this.radnoMesto = radnoMesto;
         this.vrednostZaPretragu = vrednostZaPretragu;
+        this.daLiJeObrisan = daLiJeObrisan;
+        this.prikaziObrisane = prikaziObrisane;
     }
 
     public int getZaposleniId() {
@@ -104,6 +108,22 @@ public class Zaposleni implements OpstiDomenskiObjekat{
         this.vrednostZaPretragu = vrednostZaPretragu;
     }
     
+    public boolean getDaLiJeObrisan() {
+        return daLiJeObrisan;
+    }
+
+    public void setDaLiJeObrisan(boolean daLiJeObrisan) {
+        this.daLiJeObrisan = daLiJeObrisan;
+    }
+
+    public boolean getPrikaziObrisane() {
+        return prikaziObrisane;
+    }
+    
+    public void setPrikaziObrisane(boolean prikaziObrisane) {
+        this.prikaziObrisane = prikaziObrisane;
+    }
+    
     @Override
     public String toString() {
         return ime + " " + prezime;
@@ -141,18 +161,28 @@ public class Zaposleni implements OpstiDomenskiObjekat{
 
     @Override
     public String vratiNaziveKolonaTabele() {
-        return "(ime, prezime, email, datumZaposlenja, organizacionaCelinaId, radnoMestoId)";
+        return "(ime, prezime, email, datumZaposlenja, organizacionaCelinaId, radnoMestoId, daLiJeObrisan)";
     }
 
     @Override
-    public String vratiVrednostiZaKreiranje() {
-        return "'" + ime + "','" + prezime + "','" + email + "','" + new java.sql.Date(datumZaposlenja.getTime()) + "'," + organizacionaCelina.getOrganizacionaCelinaId() + "," + radnoMesto.getRadnoMestoId();
-    }
+public String vratiVrednostiZaKreiranje() {
+    return "'" + ime + "','" + prezime + "','" + email + "','"
+        + new java.sql.Date(datumZaposlenja.getTime()) + "',"
+        + organizacionaCelina.getOrganizacionaCelinaId() + ","
+        + radnoMesto.getRadnoMestoId() + ","
+        + daLiJeObrisan;
+}
 
-    @Override
-    public String vratiVrednostiZaIzmenu() {
-        return "ime='" + ime + "', prezime='" + prezime + "', email='" + email + "', datumZaposlenja='" + new java.sql.Date(datumZaposlenja.getTime()) + "', organizacionaCelinaId=" + organizacionaCelina.getOrganizacionaCelinaId() + ", radnoMestoId=" + radnoMesto.getRadnoMestoId();
-    }
+@Override
+public String vratiVrednostiZaIzmenu() {
+    return "ime='" + ime
+        + "', prezime='" + prezime
+        + "', email='" + email
+        + "', datumZaposlenja='" + new java.sql.Date(datumZaposlenja.getTime())
+        + "', organizacionaCelinaId=" + organizacionaCelina.getOrganizacionaCelinaId()
+        + ", radnoMestoId=" + radnoMesto.getRadnoMestoId()
+        + ", daLiJeObrisan=" + daLiJeObrisan;
+}
 
     @Override
     public String alijas() {
@@ -172,12 +202,18 @@ public class Zaposleni implements OpstiDomenskiObjekat{
 
     @Override
     public String uslovZaPretragu() {
-        return "WHERE z.ime LIKE'%" + this.vrednostZaPretragu +
-               "%' OR z.prezime LIKE'%" + this.vrednostZaPretragu +
-               "%' OR z.email LIKE'%" + this.vrednostZaPretragu +
-               "%' OR oc.nazivOrganizacioneCeline LIKE'%" + this.vrednostZaPretragu +
-               "%' OR rm.nazivRadnogMesta LIKE'%" + this.vrednostZaPretragu +
-               "%'";
+        String uslov = "WHERE (z.ime LIKE'%" + this.vrednostZaPretragu +
+                   "%' OR z.prezime LIKE'%" + this.vrednostZaPretragu +
+                   "%' OR z.email LIKE'%" + this.vrednostZaPretragu +
+                   "%' OR oc.nazivOrganizacioneCeline LIKE'%" + this.vrednostZaPretragu +
+                   "%' OR rm.nazivRadnogMesta LIKE'%" + this.vrednostZaPretragu +
+                   "%')";
+
+        if (!this.prikaziObrisane) {
+            return uslov + " AND z.daLiJeObrisan = 0";
+        }
+
+        return uslov;
     }
 
     @Override
@@ -190,6 +226,7 @@ public class Zaposleni implements OpstiDomenskiObjekat{
             z.setPrezime(rs.getString("prezime"));
             z.setEmail(rs.getString("email"));
             z.setDatumZaposlenja(rs.getDate("datumZaposlenja"));
+            z.setDaLiJeObrisan(rs.getBoolean("daLiJeObrisan"));
 
             OrganizacionaCelina oc = new OrganizacionaCelina();
             oc.setOrganizacionaCelinaId(rs.getInt("organizacionaCelinaId"));
@@ -208,5 +245,13 @@ public class Zaposleni implements OpstiDomenskiObjekat{
         rs.close();
         return listaZaposlenih;
     }
+    
+    @Override
+    public String vratiUslovZaPretragu() {
+        if(prikaziObrisane){
+        return "";
+        }
+        return "WHERE z.daLiJeObrisan = 0";
+    } 
     
 }

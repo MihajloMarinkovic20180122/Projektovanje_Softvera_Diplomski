@@ -32,7 +32,7 @@ public class SOVratiAngazovanjaZaposlenog extends SOOpsteIzvrsenje{
         try {
             for (OpstiDomenskiObjekat opstiDomenskiObjekat : listaAngazovanjaOpsta) {
             Angazovanje a =  (Angazovanje) opstiDomenskiObjekat;
-            if(a.getZaposleni().equals(zaposleni)){
+            if(a.getZaposleni().equals(zaposleni) && !a.getDaLiJeObrisan()){
                 lista.add(opstiDomenskiObjekat);
             }
         }

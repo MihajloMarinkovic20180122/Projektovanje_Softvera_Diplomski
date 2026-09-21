@@ -41,6 +41,8 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
         this.glavnaForma = (GlavnaForma) parent;
         try {
             initComponents();
+            jLabel2.setVisible(false);
+            txtIdProjekta.setVisible(false);
             if(lokalizacija.JezikMenadzer.getOdabir() == null){
                 lokalizacija.JezikMenadzer.setOdabir("srpski - latinica");
             }
@@ -54,7 +56,7 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
             tblZaposleni.setModel(mtz);
             btnObrisiProjekat.setEnabled(false);
             btnIzmeniProjekat.setEnabled(false);
-            popuniTabeluSvimProjektima();
+            popuniTabeluSvimProjektima(false);
             popuniCmbRukovodilac();
             popuniCmbPrioriter();
             popuniCmbStanje();
@@ -78,6 +80,7 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblProjekti = new javax.swing.JTable();
         btnPronadjiProjekat = new javax.swing.JButton();
+        cBoxPrikaziObrisane = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         btnObrisiProjekat = new javax.swing.JButton();
         btnIzmeniProjekat = new javax.swing.JButton();
@@ -99,6 +102,8 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
         txtIdProjekta = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         cmbStanjeProjekta = new javax.swing.JComboBox();
+        lblKrajRealizacije = new javax.swing.JLabel();
+        txtKrajRealizacijeProjekta = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -129,6 +134,13 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
             }
         });
 
+        cBoxPrikaziObrisane.setText("Prikaži obrisane");
+        cBoxPrikaziObrisane.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cBoxPrikaziObrisaneActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -140,7 +152,9 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(txtPretraga)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnPronadjiProjekat)))
+                        .addComponent(btnPronadjiProjekat)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cBoxPrikaziObrisane)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -149,7 +163,8 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtPretraga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnPronadjiProjekat))
+                    .addComponent(btnPronadjiProjekat)
+                    .addComponent(cBoxPrikaziObrisane))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1)
                 .addContainerGap())
@@ -220,6 +235,14 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
 
         jLabel3.setText("Stanje:");
 
+        lblKrajRealizacije.setText("Kraj realizacije:");
+
+        try {
+            txtKrajRealizacijeProjekta.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##.##.####.")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -241,7 +264,8 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
                             .addComponent(lblNazivProjekta)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2)
-                            .addComponent(jLabel3))
+                            .addComponent(jLabel3)
+                            .addComponent(lblKrajRealizacije))
                         .addGap(15, 15, 15)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtNazivProjekta)
@@ -255,7 +279,8 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnObrisiZaposlenog, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(txtIdProjekta)
-                            .addComponent(cmbStanjeProjekta, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(cmbStanjeProjekta, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtKrajRealizacijeProjekta))))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -273,6 +298,10 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNazivProjekta1)
                     .addComponent(txtPocetakRealizacijeProjekta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblKrajRealizacije)
+                    .addComponent(txtKrajRealizacijeProjekta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblRukovodilacProjekta)
@@ -327,7 +356,8 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
     private void btnPronadjiProjekatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPronadjiProjekatActionPerformed
         try {
             String pretraga = txtPretraga.getText();
-            LinkedList<Projekat> listaProjekataIzPretrage = KlijentKontrolerProjekat.getInstanca().pronadjiPaVratiProjekte(pretraga);
+            boolean prikaziObrisane = cBoxPrikaziObrisane.isSelected();
+            LinkedList<Projekat> listaProjekataIzPretrage = KlijentKontrolerProjekat.getInstanca().pronadjiPaVratiProjekte(pretraga, prikaziObrisane);
             ModelTabeleProjekti mtp =  (ModelTabeleProjekti) tblProjekti.getModel();
             mtp.setListaProjekata(listaProjekataIzPretrage);
             LinkedList<Projekat> vracenaLista = mtp.vratiListu();
@@ -352,11 +382,12 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
             //JOptionPane.showMessageDialog(rootPane, "Uspesno ste obrisali projekat: " + projekat);
             JOptionPane.showMessageDialog(rootPane, lokalizacija.JezikMenadzer.get("obrisaoProjekat"), lokalizacija.JezikMenadzer.get("uspesnoIzvrseno"), JOptionPane.INFORMATION_MESSAGE);
             
-            mtp.setListaProjekata(KlijentKontrolerProjekat.getInstanca().vratiProjekte());
+            mtp.setListaProjekata(KlijentKontrolerProjekat.getInstanca().vratiProjekte(cBoxPrikaziObrisane.isSelected()));
             
             txtIdProjekta.setText("");
             txtNazivProjekta.setText("");
             txtPocetakRealizacijeProjekta.setText("");
+            txtKrajRealizacijeProjekta.setText("");
             cmbRukovodilacProjekta.setSelectedIndex(0);
             cmbPrioritetProjekta.setSelectedIndex(0);
             cmbStanjeProjekta.setSelectedIndex(0);
@@ -415,6 +446,33 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
                 popuniPodatkeUcitanogProjekta(ucitaniProjekat);
                 btnIzmeniProjekat.setEnabled(true);
                 btnObrisiProjekat.setEnabled(true);
+                if(odabraniProjekat.getDaLiJeObrisan()){
+                    txtNazivProjekta.setEnabled(false);
+                    txtPocetakRealizacijeProjekta.setEnabled(false);
+                    txtKrajRealizacijeProjekta.setEnabled(false);
+                    cmbRukovodilacProjekta.setEnabled(false);
+                    cmbPrioritetProjekta.setEnabled(false);
+                    cmbStanjeProjekta.setEnabled(false);
+                    cmbZaposleni.setEnabled(false);
+                    btnDodajZaposlenog.setEnabled(false);
+                    btnObrisiZaposlenog.setEnabled(false);
+                    btnIzmeniProjekat.setEnabled(false);
+                    btnObrisiProjekat.setEnabled(false);
+                    tblZaposleni.setEnabled(false);
+                } else {
+                    txtNazivProjekta.setEnabled(true);
+                    txtPocetakRealizacijeProjekta.setEnabled(true);
+                    txtKrajRealizacijeProjekta.setEnabled(true);
+                    cmbRukovodilacProjekta.setEnabled(true);
+                    cmbPrioritetProjekta.setEnabled(true);
+                    cmbStanjeProjekta.setEnabled(true);
+                    cmbZaposleni.setEnabled(true);
+                    btnDodajZaposlenog.setEnabled(true);
+                    btnObrisiZaposlenog.setEnabled(true);
+                    btnIzmeniProjekat.setEnabled(true);
+                    btnObrisiProjekat.setEnabled(true);
+                    tblZaposleni.setEnabled(true);
+                }
                 JOptionPane.showMessageDialog(rootPane, lokalizacija.JezikMenadzer.get("uspesnoUcitaoProjekat"), lokalizacija.JezikMenadzer.get("uspesnoIzvrseno"), JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (Exception ex){
@@ -422,7 +480,7 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
                 ex.printStackTrace();
                 //JOptionPane.showMessageDialog(rootPane, ex.getMessage(), "Doslo je do greske!", JOptionPane.ERROR_MESSAGE);
                 JOptionPane.showMessageDialog(rootPane, "Projekat " + odabraniProjekat + " je obrisan.", lokalizacija.JezikMenadzer.get("dosloJeDoGreske"), JOptionPane.INFORMATION_MESSAGE);
-                LinkedList<Projekat> listaSvihProjekata = KlijentKontrolerProjekat.getInstanca().vratiProjekte();
+                LinkedList<Projekat> listaSvihProjekata = KlijentKontrolerProjekat.getInstanca().vratiProjekte(cBoxPrikaziObrisane.isSelected());
                 if (listaSvihProjekata.size() > 0) {
                     ModelTabeleProjekti mtp =  (ModelTabeleProjekti) tblProjekti.getModel();
                     mtp.setListaProjekata(listaSvihProjekata);
@@ -442,7 +500,7 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
             if(proveriNovePodatke(izmenjeniProjekat)){
                 KlijentKontrolerProjekat.getInstanca().izmeniProjekat(izmenjeniProjekat);
                 JOptionPane.showMessageDialog(rootPane, lokalizacija.JezikMenadzer.get("zapamtioProjekat"), lokalizacija.JezikMenadzer.get("uspesnoIzvrseno"), JOptionPane.INFORMATION_MESSAGE);
-                LinkedList<Projekat> listaSvihProjekata = KlijentKontrolerProjekat.getInstanca().vratiProjekte();
+                LinkedList<Projekat> listaSvihProjekata = KlijentKontrolerProjekat.getInstanca().vratiProjekte(cBoxPrikaziObrisane.isSelected());
                 ModelTabeleProjekti mtp = (ModelTabeleProjekti) tblProjekti.getModel();
                 mtp.setListaProjekata(listaSvihProjekata);
                 btnObrisiProjekat.setEnabled(false);
@@ -456,6 +514,15 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btnIzmeniProjekatActionPerformed
 
+    private void cBoxPrikaziObrisaneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cBoxPrikaziObrisaneActionPerformed
+        try {
+            boolean prikaziObrisane = cBoxPrikaziObrisane.isSelected();
+            popuniTabeluSvimProjektima(prikaziObrisane);
+        } catch (Exception ex) {
+            Logger.getLogger(ObrisiProjekatForma.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_cBoxPrikaziObrisaneActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -465,6 +532,7 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
     private javax.swing.JButton btnObrisiProjekat;
     private javax.swing.JButton btnObrisiZaposlenog;
     private javax.swing.JButton btnPronadjiProjekat;
+    private javax.swing.JCheckBox cBoxPrikaziObrisane;
     private javax.swing.JComboBox cmbPrioritetProjekta;
     private javax.swing.JComboBox<Object> cmbRukovodilacProjekta;
     private javax.swing.JComboBox cmbStanjeProjekta;
@@ -476,6 +544,7 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel lblKrajRealizacije;
     private javax.swing.JLabel lblNazivProjekta;
     private javax.swing.JLabel lblNazivProjekta1;
     private javax.swing.JLabel lblPrioritetProjekta;
@@ -483,13 +552,14 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
     private javax.swing.JTable tblProjekti;
     private javax.swing.JTable tblZaposleni;
     private javax.swing.JTextField txtIdProjekta;
+    private javax.swing.JFormattedTextField txtKrajRealizacijeProjekta;
     private javax.swing.JTextField txtNazivProjekta;
     private javax.swing.JFormattedTextField txtPocetakRealizacijeProjekta;
     private javax.swing.JTextField txtPretraga;
     // End of variables declaration//GEN-END:variables
 
-    private void popuniTabeluSvimProjektima() throws Exception {
-        LinkedList<Projekat> listaSvihProjekata = KlijentKontrolerProjekat.getInstanca().vratiProjekte();
+    private void popuniTabeluSvimProjektima(boolean prikaziObrisane) throws Exception {
+        LinkedList<Projekat> listaSvihProjekata = KlijentKontrolerProjekat.getInstanca().vratiProjekte(prikaziObrisane);
         if (listaSvihProjekata.size() > 0) {
             ModelTabeleProjekti mtp = (ModelTabeleProjekti) tblProjekti.getModel();
             mtp.setListaProjekata(listaSvihProjekata);
@@ -504,7 +574,7 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
 
     private void popuniCmbRukovodilac() throws Exception {
         cmbRukovodilacProjekta.removeAllItems();
-        LinkedList<Zaposleni> listaRukovodioca = KlijentKontrolerZaposleni.getInstanca().vratiZaposlene();
+        LinkedList<Zaposleni> listaRukovodioca = KlijentKontrolerZaposleni.getInstanca().vratiZaposlene(false);
         for (Zaposleni zaposleni : listaRukovodioca) {
             cmbRukovodilacProjekta.addItem(zaposleni);
         }
@@ -519,7 +589,7 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
 
     private void popuniCmbZaposleni() throws Exception {
         cmbZaposleni.removeAllItems();
-        LinkedList<Zaposleni> listaZaposlenih = KlijentKontrolerZaposleni.getInstanca().vratiZaposlene();
+        LinkedList<Zaposleni> listaZaposlenih = KlijentKontrolerZaposleni.getInstanca().vratiZaposlene(false);
         for (Zaposleni zaposleni : listaZaposlenih) {
             cmbZaposleni.addItem(zaposleni);
         }
@@ -530,6 +600,11 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
         txtNazivProjekta.setText(ucitaniProjekat.getNazivProjekta());
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy.");
         txtPocetakRealizacijeProjekta.setText(sdf.format(ucitaniProjekat.getPocetakRealizacije()));
+        if (ucitaniProjekat.getKrajRealizacije() != null) {
+            txtKrajRealizacijeProjekta.setText(sdf.format(ucitaniProjekat.getKrajRealizacije()));
+        } else {
+            txtKrajRealizacijeProjekta.setText("");;
+        }
         cmbRukovodilacProjekta.setSelectedItem(ucitaniProjekat.getRukovodilac());
         cmbPrioritetProjekta.setSelectedItem(ucitaniProjekat.getPrioritet());
         cmbStanjeProjekta.setSelectedItem(ucitaniProjekat.getStanje());
@@ -554,8 +629,21 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
         }
             
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy.");
-        izmenjeniProjekat.setPocetakRealizacije(sdf.parse(txtPocetakRealizacijeProjekta.getText()));
+        Date datumPocetkaRealizacije = sdf.parse(txtPocetakRealizacijeProjekta.getText());
+        izmenjeniProjekat.setPocetakRealizacije(datumPocetkaRealizacije);
+        
+        Date datumKrajaRealizacije = null;
+        
+        if(!txtKrajRealizacijeProjekta.getText().contains(" ")){
+            datumKrajaRealizacije = sdf.parse(txtKrajRealizacijeProjekta.getText());
+        }
 
+        if (datumKrajaRealizacije != null && !datumKrajaRealizacije.after(datumPocetkaRealizacije)) {
+            JOptionPane.showMessageDialog(null, lokalizacija.JezikMenadzer.get("krajRealizacijeMoraBitiNakonPocetka"), lokalizacija.JezikMenadzer.get("greskaPriIzmeniProjekta"), JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        izmenjeniProjekat.setKrajRealizacije(datumKrajaRealizacije);
         izmenjeniProjekat.setRukovodilac((Zaposleni) cmbRukovodilacProjekta.getSelectedItem());
         izmenjeniProjekat.setPrioritet((Prioritet) cmbPrioritetProjekta.getSelectedItem());
         izmenjeniProjekat.setStanje((Stanje) cmbStanjeProjekta.getSelectedItem());
@@ -599,6 +687,7 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
         jLabel2.setText(lokalizacija.JezikMenadzer.get("id") + ':');
         lblNazivProjekta.setText(lokalizacija.JezikMenadzer.get("nazivProjekta") + ':');
         lblNazivProjekta1.setText(lokalizacija.JezikMenadzer.get("pocetakRealizacije") + ':');
+        lblKrajRealizacije.setText(lokalizacija.JezikMenadzer.get("krajRealizacije") + ':');
         lblRukovodilacProjekta.setText(lokalizacija.JezikMenadzer.get("rukovodilacProjekta") + ':');
         lblPrioritetProjekta.setText(lokalizacija.JezikMenadzer.get("prioritetProjekta") + ':');
         jLabel3.setText(lokalizacija.JezikMenadzer.get("stanjeProjekta") + ':');
@@ -607,6 +696,7 @@ public class ObrisiProjekatForma extends javax.swing.JDialog {
         btnObrisiZaposlenog.setText(lokalizacija.JezikMenadzer.get("obrisi"));
         btnObrisiProjekat.setText(lokalizacija.JezikMenadzer.get("obrisiProjekat"));
         btnIzmeniProjekat.setText(lokalizacija.JezikMenadzer.get("izmeniProjekat"));
+        cBoxPrikaziObrisane.setText(lokalizacija.JezikMenadzer.get("prikaziObrisane"));
         UIManager.put("OptionPane.yesButtonText", lokalizacija.JezikMenadzer.get("da"));
         UIManager.put("OptionPane.noButtonText", lokalizacija.JezikMenadzer.get("ne"));
         UIManager.put("OptionPane.okButtonText", lokalizacija.JezikMenadzer.get("ok"));

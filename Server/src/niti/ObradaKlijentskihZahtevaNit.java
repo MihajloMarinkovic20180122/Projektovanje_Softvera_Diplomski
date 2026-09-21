@@ -99,7 +99,8 @@ public class ObradaKlijentskihZahtevaNit extends Thread{
                     }
                     break;
                 case Operacije.VRATI_ZAPOSLENE:
-                    LinkedList<Zaposleni> listaZaposlenih = ServerKontroler.getInstanca().vratiZaposlene();
+                    Zaposleni prikaziObrisaneZaposlene = mapper.convertValue(kz.getParametar(), Zaposleni.class);
+                    LinkedList<Zaposleni> listaZaposlenih = ServerKontroler.getInstanca().vratiZaposlene(prikaziObrisaneZaposlene);
                     if(listaZaposlenih == null){
                         throw new Exception("Doslo je do greske pri ucitavanju svih zaposlenih.");
                     } else {
@@ -146,7 +147,8 @@ public class ObradaKlijentskihZahtevaNit extends Thread{
                     }
                     break;
                 case Operacije.VRATI_PROJEKTE:
-                    LinkedList<Projekat> listaProjekata = ServerKontroler.getInstanca().vratiProjekte();
+                    Projekat prikaziObrisane = mapper.convertValue(kz.getParametar(), Projekat.class);
+                    LinkedList<Projekat> listaProjekata = ServerKontroler.getInstanca().vratiProjekte(prikaziObrisane);
                     if(listaProjekata == null){
                         throw new Exception("Doslo je do greske pri ucitavanju svih projekata.");
                     } else {

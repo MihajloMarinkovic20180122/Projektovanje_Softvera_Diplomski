@@ -18,24 +18,30 @@ public class Projekat implements OpstiDomenskiObjekat{
     private int projekatId;
     private String nazivProjekta;
     private Date pocetakRealizacije;
+    private Date krajRealizacije;
     private Zaposleni rukovodilac;
     private Prioritet prioritet;
     private Stanje stanje;
     private LinkedList<Zaposleni> zaposleni;
     String vrednostZaPretragu;
+    private boolean daLiJeObrisan;
+    private boolean prikaziObrisane;
 
     public Projekat() {
     }
 
-    public Projekat(int projekatId, String nazivProjekta, Date pocetakRealizacije, Zaposleni rukovodilac, Prioritet prioritet, Stanje stanje, LinkedList<Zaposleni> zaposleni, String vrednostZaPretragu) {
+    public Projekat(int projekatId, String nazivProjekta, Date pocetakRealizacije, Date krajRealizacije, Zaposleni rukovodilac, Prioritet prioritet, Stanje stanje, LinkedList<Zaposleni> zaposleni, String vrednostZaPretragu, boolean daLiJeObrisan, boolean prikaziObrisane) {
         this.projekatId = projekatId;
         this.nazivProjekta = nazivProjekta;
         this.pocetakRealizacije = pocetakRealizacije;
+        this.krajRealizacije = krajRealizacije;
         this.rukovodilac = rukovodilac;
         this.prioritet = prioritet;
         this.stanje = stanje;
         this.zaposleni = zaposleni;
         this.vrednostZaPretragu = vrednostZaPretragu;
+        this.daLiJeObrisan = daLiJeObrisan;
+        this.prikaziObrisane = prikaziObrisane;
     }
 
     public LinkedList<Zaposleni> getZaposleni() {
@@ -69,6 +75,14 @@ public class Projekat implements OpstiDomenskiObjekat{
     public void setPocetakRealizacije(Date pocetakRealizacije) {
         this.pocetakRealizacije = pocetakRealizacije;
     }
+    
+    public Date getKrajRealizacije() {
+        return krajRealizacije;
+    }
+
+    public void setKrajRealizacije(Date krajRealizacije) {
+        this.krajRealizacije = krajRealizacije;
+    }
 
     public Zaposleni getRukovodilac() {
         return rukovodilac;
@@ -101,6 +115,23 @@ public class Projekat implements OpstiDomenskiObjekat{
     public void setVrednostZaPretragu(String vrednostZaPretragu) {
         this.vrednostZaPretragu = vrednostZaPretragu;
     }
+    
+    public boolean getDaLiJeObrisan() {
+        return daLiJeObrisan;
+    }
+
+    public void setDaLiJeObrisan(boolean daLiJeObrisan) {
+        this.daLiJeObrisan = daLiJeObrisan;
+    }
+
+    public boolean getPrikaziObrisane() {
+        return prikaziObrisane;
+    }
+    
+    public void setPrikaziObrisane(boolean prikaziObrisane) {
+        this.prikaziObrisane = prikaziObrisane;
+    }
+    
 
     @Override
     public String toString() {
@@ -140,17 +171,35 @@ public class Projekat implements OpstiDomenskiObjekat{
     //fali za listu
     @Override
     public String vratiNaziveKolonaTabele() {
-        return "(nazivProjekta, pocetakRealizacije, rukovodilacId, prioritet, stanje)";
+        return "(nazivProjekta, pocetakRealizacije, krajRealizacije, rukovodilacId, prioritet, stanje, daLiJeObrisan)";
     }
 
     @Override
     public String vratiVrednostiZaKreiranje() {
-        return "'" + nazivProjekta + "','" + new java.sql.Date(pocetakRealizacije.getTime()) + "'," + rukovodilac.getZaposleniId() + ",'" + prioritet + "','" + stanje + "'";
+        return "'" + nazivProjekta + "','"
+            + new java.sql.Date(pocetakRealizacije.getTime()) + "',"
+            + (krajRealizacije != null
+                ? "'" + new java.sql.Date(krajRealizacije.getTime()) + "'"
+                : "NULL")
+            + ","
+            + rukovodilac.getZaposleniId() + ",'"
+            + prioritet + "','"
+            + stanje + "',"
+            + daLiJeObrisan;
     }
 
     @Override
     public String vratiVrednostiZaIzmenu() {
-        return "nazivProjekta='" + nazivProjekta + "', pocetakRealizacije='" + new java.sql.Date(pocetakRealizacije.getTime()) + "', rukovodilacId=" + rukovodilac.getZaposleniId() + ", prioritet='" + prioritet + "', stanje='" + stanje + "'";
+        return "nazivProjekta='" + nazivProjekta
+            + "', pocetakRealizacije='" + new java.sql.Date(pocetakRealizacije.getTime())
+            + "', krajRealizacije="
+            + (krajRealizacije != null
+                ? "'" + new java.sql.Date(krajRealizacije.getTime()) + "'"
+                : "NULL")
+            + ", rukovodilacId=" + rukovodilac.getZaposleniId()
+            + ", prioritet='" + prioritet
+            + "', stanje='" + stanje
+            + "', daLiJeObrisan=" + daLiJeObrisan;
     }
 
     @Override
@@ -172,12 +221,18 @@ public class Projekat implements OpstiDomenskiObjekat{
 
     @Override
     public String uslovZaPretragu() {
-        return "WHERE p.nazivProjekta LIKE'%" + this.vrednostZaPretragu +
-               "%' OR z.ime LIKE'%" + this.vrednostZaPretragu +
-               "%' OR z.prezime LIKE'%" + this.vrednostZaPretragu +
-               "%' OR p.prioritet LIKE'%" + this.vrednostZaPretragu +
-               "%' OR p.stanje LIKE'%" + this.vrednostZaPretragu +
-               "%'";
+        String uslov = "WHERE (p.nazivProjekta LIKE'%" + this.vrednostZaPretragu +
+            "%' OR z.ime LIKE'%" + this.vrednostZaPretragu +
+            "%' OR z.prezime LIKE'%" + this.vrednostZaPretragu +
+            "%' OR p.prioritet LIKE'%" + this.vrednostZaPretragu +
+            "%' OR p.stanje LIKE'%" + this.vrednostZaPretragu +
+            "%')";
+
+            if (!this.prikaziObrisane) {
+                return uslov + " AND p.daLiJeObrisan = 0";
+            }
+
+            return uslov;
     }
 
     @Override
@@ -188,8 +243,10 @@ public class Projekat implements OpstiDomenskiObjekat{
             p.setProjekatId(rs.getInt("projekatId"));
             p.setNazivProjekta(rs.getString("nazivProjekta"));
             p.setPocetakRealizacije(rs.getDate("pocetakRealizacije"));
+            p.setKrajRealizacije(rs.getDate("krajRealizacije"));
             p.setPrioritet(Prioritet.valueOf(rs.getString("prioritet")));
             p.setStanje(Stanje.valueOf(rs.getString("stanje")));
+            p.setDaLiJeObrisan(rs.getBoolean("daLiJeObrisan"));
 
             Zaposleni z = new Zaposleni();
             z.setZaposleniId(rs.getInt("zaposleniId"));
@@ -218,11 +275,12 @@ public class Projekat implements OpstiDomenskiObjekat{
     }
 
     
-
-    
-
-    
-    
-    
+    @Override
+    public String vratiUslovZaPretragu() {
+        if(prikaziObrisane){
+        return "";
+        }
+        return "WHERE p.daLiJeObrisan = 0";
+    }
     
 }

@@ -36,4 +36,6 @@ public interface OpstiDomenskiObjekat extends Serializable{
     String uslovZaPretragu();
     
     List<OpstiDomenskiObjekat> vratiSve(ResultSet rs) throws SQLException;
+    
+    String vratiUslovZaPretragu();
 }

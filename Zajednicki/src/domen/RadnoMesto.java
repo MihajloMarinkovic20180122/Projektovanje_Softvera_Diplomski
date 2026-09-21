@@ -153,12 +153,10 @@ public class RadnoMesto implements OpstiDomenskiObjekat{
         return listaRadnihMesta;
     }
 
-    
-
-    
-
-    
-    
+    @Override
+    public String vratiUslovZaPretragu() {
+        return "";
+    } 
     
     
 }

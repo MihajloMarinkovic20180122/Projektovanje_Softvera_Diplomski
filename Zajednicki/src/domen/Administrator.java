@@ -136,8 +136,9 @@ public class Administrator implements OpstiDomenskiObjekat{
         return Objects.equals(this.email, other.email);
     }
 
-   
-    
-    
+   @Override
+    public String vratiUslovZaPretragu() {
+        return "";
+    }
     
 }

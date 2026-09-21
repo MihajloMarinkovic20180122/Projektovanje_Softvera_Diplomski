@@ -195,7 +195,7 @@ public class GlavnaForma extends javax.swing.JFrame{
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(857, Short.MAX_VALUE)
+                .addContainerGap(917, Short.MAX_VALUE)
                 .addComponent(lblUlogovani)
                 .addContainerGap())
         );
@@ -203,7 +203,7 @@ public class GlavnaForma extends javax.swing.JFrame{
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(lblUlogovani)
-                .addGap(0, 421, Short.MAX_VALUE))
+                .addGap(0, 491, Short.MAX_VALUE))
         );
 
         pack();
@@ -300,11 +300,11 @@ public class GlavnaForma extends javax.swing.JFrame{
     
     public void iscrtajGrafike() throws Exception{
         LinkedList<Angazovanje> listaSvihAngazovanja = KlijentKontrolerAngazovanje.getInstanca().vratiAngazovanja();
-        LinkedList<Projekat> listaSvihProjekata = KlijentKontrolerProjekat.getInstanca().vratiProjekte();
+        LinkedList<Projekat> listaSvihProjekata = KlijentKontrolerProjekat.getInstanca().vratiProjekte(false);
 
         Map<Projekat, Integer> statistikaZaposleniNaProjektima = new java.util.TreeMap<>((p1, p2) -> Integer.compare(p1.getProjekatId(), p2.getProjekatId()));
         for (Angazovanje a : listaSvihAngazovanja) {
-            if (a.getProjekat() != null) {
+            if (a.getProjekat() != null && !a.getDaLiJeObrisan()) {
                 Projekat p = a.getProjekat();
                 statistikaZaposleniNaProjektima.put(p, statistikaZaposleniNaProjektima.getOrDefault(p, 0) + 1);
             }

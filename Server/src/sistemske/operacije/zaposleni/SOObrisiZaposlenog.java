@@ -4,7 +4,9 @@
  */
 package sistemske.operacije.zaposleni;
 
+import domen.Angazovanje;
 import domen.OpstiDomenskiObjekat;
+import domen.Projekat;
 import domen.RadnoMesto;
 import domen.Zaposleni;
 import java.util.LinkedList;
@@ -40,12 +42,45 @@ public class SOObrisiZaposlenog extends SOOpsteIzvrsenje{
     @Override
     public boolean izvrsiSO(OpstiDomenskiObjekat odo) throws Exception {
         Zaposleni zaposleniZaObrisati = (Zaposleni) odo;
-        boolean obrisanZaposleni = dbb.obrisi(odo);
-        RadnoMesto rm = zaposleniZaObrisati.getRadnoMesto();
-        rm.setBrojZaposlenih(rm.getBrojZaposlenih() - 1);
-        dbb.izmeni(rm);
+        //boolean obrisanZaposleni = dbb.obrisi(odo);
         
-        return obrisanZaposleni;
+        LinkedList<OpstiDomenskiObjekat> listaAngazovanjaOpsta = dbb.vratiSve(new Angazovanje());
+        LinkedList<Angazovanje> listaAngazovanja = new LinkedList<>();
+        for (OpstiDomenskiObjekat opstiDomenskiObjekat : listaAngazovanjaOpsta) {
+            listaAngazovanja.add((Angazovanje) opstiDomenskiObjekat);
+        }
+        LinkedList<Angazovanje> listaAngazovanjaZaZaposlenog = new LinkedList<>();
+        for (Angazovanje angazovanje1 : listaAngazovanja) {
+            if(angazovanje1.getZaposleni().getZaposleniId()== zaposleniZaObrisati.getZaposleniId() && !angazovanje1.getDaLiJeObrisan()){
+                listaAngazovanjaZaZaposlenog.add(angazovanje1);
+            }
+        }
+        
+        LinkedList<OpstiDomenskiObjekat> listaProjekataOpsta = dbb.vratiSve(new Projekat());
+        LinkedList<Projekat> listaProjekata = new LinkedList<>();
+        for (OpstiDomenskiObjekat opstiDomenskiObjekat : listaProjekataOpsta) {
+            listaProjekata.add((Projekat) opstiDomenskiObjekat);
+        }
+        LinkedList<Projekat> listaProjekataRukovodilac = new LinkedList<>();
+        for (Projekat projekat1 : listaProjekata) {
+            if(projekat1.getRukovodilac().getZaposleniId() == zaposleniZaObrisati.getZaposleniId() && !projekat1.getDaLiJeObrisan()){
+                listaProjekataRukovodilac.add(projekat1);
+            }
+        }
+        
+        if(listaAngazovanjaZaZaposlenog.isEmpty() && listaProjekataRukovodilac.isEmpty()){
+            zaposleniZaObrisati.setDaLiJeObrisan(true);
+            boolean obrisanZaposleni = dbb.izmeni(odo);
+            RadnoMesto rm = zaposleniZaObrisati.getRadnoMesto();
+            rm.setBrojZaposlenih(rm.getBrojZaposlenih() - 1);
+            dbb.izmeni(rm);
+
+            return obrisanZaposleni;
+        } else{
+            return false;
+        }
+        
+        
     }
     
 }

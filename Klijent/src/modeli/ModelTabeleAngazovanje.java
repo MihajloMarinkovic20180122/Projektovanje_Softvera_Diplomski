@@ -16,7 +16,7 @@ import javax.swing.table.AbstractTableModel;
 public class ModelTabeleAngazovanje extends AbstractTableModel{
 
     LinkedList<Angazovanje> listaAngazovanja = new LinkedList<>();
-    String[] kolone = {"Zaposleni","Projekat","Pocetak Angazovanja","Kraj Angazovanja"};
+    String[] kolone = {"Projekat","Pocetak Angazovanja","Kraj Angazovanja"};
     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy.");
     private String odabirJezika = lokalizacija.JezikMenadzer.getOdabir();
 
@@ -39,13 +39,13 @@ public class ModelTabeleAngazovanje extends AbstractTableModel{
     public String getColumnName(int column) {
         switch (odabirJezika) {
             case "srpski - latinica":
-                kolone = new String[]{"Zaposleni","Projekat","Pocetak Angazovanja","Kraj Angazovanja"};
+                kolone = new String[]{"Projekat","Pocetak Angazovanja","Kraj Angazovanja"};
                 break;
             case "srpski - cirilica":
-                kolone = new String[]{"Запослени","Пројекат","Почетак Ангажовања","Крај Ангажовања"};
+                kolone = new String[]{"Пројекат","Почетак Ангажовања","Крај Ангажовања"};
                 break;
             case "english":
-                kolone = new String[]{"Employee","Project","Start Date","End Date"};
+                kolone = new String[]{"Project","Start Date","End Date"};
                 break;
             default:
                 throw new AssertionError();
@@ -58,14 +58,12 @@ public class ModelTabeleAngazovanje extends AbstractTableModel{
         Angazovanje angazovanje = listaAngazovanja.get(rowIndex);
         switch (columnIndex) {
             case 0:
-                return angazovanje.getZaposleni();
-            case 1:
                 return angazovanje.getProjekat();
-            case 2:
+            case 1:
                 if (angazovanje.getPocetakAngazovanja() != null) {
                     return sdf.format(angazovanje.getPocetakAngazovanja());
                 }
-            case 3:
+            case 2:
                 if (angazovanje.getKrajAngazovanja() != null) {
                     return sdf.format(angazovanje.getKrajAngazovanja());
                 }

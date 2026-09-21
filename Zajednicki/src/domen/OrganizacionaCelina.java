@@ -125,7 +125,9 @@ public class OrganizacionaCelina implements OpstiDomenskiObjekat{
         return listaOrganizacionihCelina;
     }
     
-    
-    
+    @Override
+    public String vratiUslovZaPretragu() {
+        return "";
+    } 
     
 }

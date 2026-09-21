@@ -80,9 +80,9 @@ public class ServerKontroler {
         return so.sOOpsteIzvrsenje(zaposleni);
     }
 
-    public LinkedList<Zaposleni> vratiZaposlene() throws Exception {
+    public LinkedList<Zaposleni> vratiZaposlene(Zaposleni prikaziObrisaneZaposlene) throws Exception {
         SOVratiSveZaposlene so = new SOVratiSveZaposlene();
-        so.sOOpsteIzvrsenje(new Zaposleni());
+        so.sOOpsteIzvrsenje(prikaziObrisaneZaposlene);
         return so.getLista();
     }
     
@@ -114,9 +114,9 @@ public class ServerKontroler {
         return so.sOOpsteIzvrsenje(projekat);
     }
 
-    public LinkedList<Projekat> vratiProjekte() throws Exception {
+    public LinkedList<Projekat> vratiProjekte(Projekat prikaziObrisane) throws Exception {
         SOVratiSveProjekte so = new SOVratiSveProjekte();
-        so.sOOpsteIzvrsenje(new Projekat());
+        so.sOOpsteIzvrsenje(prikaziObrisane);
         return so.getLista();
     }
 

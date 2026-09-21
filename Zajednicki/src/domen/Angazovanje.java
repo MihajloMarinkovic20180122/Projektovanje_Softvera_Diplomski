@@ -20,16 +20,18 @@ public class Angazovanje implements OpstiDomenskiObjekat{
     private Zaposleni zaposleni;
     private Date pocetakAngazovanja;
     private Date krajAngazovanja;
+    private boolean daLiJeObrisan;
 
     public Angazovanje() {
     }
 
-    public Angazovanje(int angazovanjeId, Projekat projekat, Zaposleni zaposleni, Date pocetakAngazovanja, Date krajAngazovanja) {
+    public Angazovanje(int angazovanjeId, Projekat projekat, Zaposleni zaposleni, Date pocetakAngazovanja, Date krajAngazovanja, boolean daLiJeObrisan) {
         this.angazovanjeId = angazovanjeId;
         this.projekat = projekat;
         this.zaposleni = zaposleni;
         this.pocetakAngazovanja = pocetakAngazovanja;
         this.krajAngazovanja = krajAngazovanja;
+        this.daLiJeObrisan = daLiJeObrisan;
     }
 
     public Date getKrajAngazovanja() {
@@ -71,6 +73,14 @@ public class Angazovanje implements OpstiDomenskiObjekat{
     public void setPocetakAngazovanja(Date pocetakAngazovanja) {
         this.pocetakAngazovanja = pocetakAngazovanja;
     }
+    
+    public boolean getDaLiJeObrisan() {
+        return daLiJeObrisan;
+    }
+
+    public void setDaLiJeObrisan(boolean daLiJeObrisan) {
+        this.daLiJeObrisan = daLiJeObrisan;
+    }
 
     @Override
     public String vratiNazivPrimarnogKljuca() {
@@ -89,21 +99,33 @@ public class Angazovanje implements OpstiDomenskiObjekat{
 
     @Override
     public String vratiNaziveKolonaTabele() {
-        return "(zaposleniId, projekatId, pocetakAngazovanja, krajAngazovanja)";
+        return "(zaposleniId, projekatId, pocetakAngazovanja, krajAngazovanja, daLiJeObrisan)";
     }
 
     @Override
     public String vratiVrednostiZaKreiranje() {
-        if(krajAngazovanja != null){
-            return "" + zaposleni.getZaposleniId() + "," + projekat.getProjekatId() + ",'" + new java.sql.Date(pocetakAngazovanja.getTime()) + "','" + new java.sql.Date(krajAngazovanja.getTime()) + "'";
-        } else {
-            return "" + zaposleni.getZaposleniId() + "," + projekat.getProjekatId() + ",'" + new java.sql.Date(pocetakAngazovanja.getTime()) + "'," + null;
-        }
+        if (krajAngazovanja != null) {
+        return zaposleni.getZaposleniId() + ","
+            + projekat.getProjekatId() + ",'"
+            + new java.sql.Date(pocetakAngazovanja.getTime()) + "','"
+            + new java.sql.Date(krajAngazovanja.getTime()) + "',"
+            + daLiJeObrisan;
+    } else {
+        return zaposleni.getZaposleniId() + ","
+            + projekat.getProjekatId() + ",'"
+            + new java.sql.Date(pocetakAngazovanja.getTime()) + "',"
+            + "NULL,"
+            + daLiJeObrisan;
+    }
     }
 
     @Override
     public String vratiVrednostiZaIzmenu() {
-        return "krajAngazovanja='" + new java.sql.Date(new Date().getTime()) + "'";
+        return "krajAngazovanja="
+        + (krajAngazovanja != null
+            ? "'" + new java.sql.Date(krajAngazovanja.getTime()) + "'"
+            : "NULL")
+        + ", daLiJeObrisan=" + daLiJeObrisan;
     }
 
     @Override
@@ -140,8 +162,10 @@ public class Angazovanje implements OpstiDomenskiObjekat{
                 p.setProjekatId(rs.getInt("projekatId"));
                 p.setNazivProjekta(rs.getString("nazivProjekta"));
                 p.setPocetakRealizacije(rs.getDate("pocetakRealizacije"));
+                p.setKrajRealizacije(rs.getDate("krajRealizacije"));
                 p.setPrioritet(Prioritet.valueOf(rs.getString("prioritet")));
                 p.setStanje(Stanje.valueOf(rs.getString("stanje")));
+                p.setDaLiJeObrisan(rs.getBoolean("daLiJeObrisan"));
 
                 Zaposleni z = new Zaposleni();
                 z.setZaposleniId(rs.getInt("zaposleniId"));
@@ -186,6 +210,7 @@ public class Angazovanje implements OpstiDomenskiObjekat{
 
             a.setPocetakAngazovanja(rs.getDate("pocetakAngazovanja"));
             a.setKrajAngazovanja(rs.getDate("krajAngazovanja"));
+            a.setDaLiJeObrisan(rs.getBoolean("daLiJeObrisan"));
 
             listaAngazovanja.add(a);
         }
@@ -194,5 +219,9 @@ public class Angazovanje implements OpstiDomenskiObjekat{
         return  listaAngazovanja;
     }
     
-    
+    @Override
+    public String vratiUslovZaPretragu() {
+        return "";
+    }   
+
 }

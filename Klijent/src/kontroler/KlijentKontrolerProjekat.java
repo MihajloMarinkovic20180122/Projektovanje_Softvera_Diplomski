@@ -29,13 +29,16 @@ public class KlijentKontrolerProjekat extends OpstiKlijentskiKontroler{
         posaljiZahtev(Operacije.DODAJ_PROJEKAT, projekat, Projekat.class);
     }
     
-     public LinkedList<Projekat> vratiProjekte() throws Exception {
-        return posaljiZahtevZaListu(Operacije.VRATI_PROJEKTE, null, Projekat.class);
+     public LinkedList<Projekat> vratiProjekte(boolean prikaziObrisane) throws Exception {
+        Projekat projekat = new Projekat();
+        projekat.setPrikaziObrisane(prikaziObrisane);
+        return posaljiZahtevZaListu(Operacije.VRATI_PROJEKTE, projekat, Projekat.class);
     }
 
-    public LinkedList<Projekat> pronadjiPaVratiProjekte(String pretraga) throws Exception {
+    public LinkedList<Projekat> pronadjiPaVratiProjekte(String pretraga, boolean prikaziObrisane) throws Exception {
         Projekat projekat = new Projekat();
         projekat.setVrednostZaPretragu(pretraga);
+        projekat.setPrikaziObrisane(prikaziObrisane);
         
         return posaljiZahtevZaListu(Operacije.VRATI_PROJEKTE_PRETRAGA, projekat, Projekat.class);
     }

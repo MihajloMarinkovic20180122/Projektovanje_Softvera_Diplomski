@@ -40,13 +40,16 @@ public class KlijentKontrolerZaposleni extends OpstiKlijentskiKontroler{
         posaljiZahtev(Operacije.DODAJ_ZAPOSLENOG, zaposleni, Zaposleni.class);
     }
 
-    public LinkedList<Zaposleni> vratiZaposlene() throws Exception {
-        return posaljiZahtevZaListu(Operacije.VRATI_ZAPOSLENE, null, Zaposleni.class);
+    public LinkedList<Zaposleni> vratiZaposlene(boolean prikaziObrisane) throws Exception {
+        Zaposleni zaposleni = new Zaposleni();
+        zaposleni.setPrikaziObrisane(prikaziObrisane);
+        return posaljiZahtevZaListu(Operacije.VRATI_ZAPOSLENE, zaposleni, Zaposleni.class);
     }
     
-    public LinkedList<Zaposleni> pronadjiPaVratiZaposlene(String pretraga) throws Exception {
+    public LinkedList<Zaposleni> pronadjiPaVratiZaposlene(String pretraga, boolean prikaziObrisane) throws Exception {
         Zaposleni zaposleni = new Zaposleni();
         zaposleni.setVrednostZaPretragu(pretraga);
+        zaposleni.setPrikaziObrisane(prikaziObrisane);
         
         return posaljiZahtevZaListu(Operacije.VRATI_ZAPOSLENE_PRETRAGA, zaposleni, Zaposleni.class);
     }

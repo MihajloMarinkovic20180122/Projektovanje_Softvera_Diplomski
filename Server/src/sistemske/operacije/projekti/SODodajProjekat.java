@@ -45,7 +45,7 @@ public class SODodajProjekat extends SOOpsteIzvrsenje{
                 noviProjekat.setProjekatId(projekatId);
                 LinkedList<Zaposleni> listaZaposlenih = noviProjekat.getZaposleni();
                 for (Zaposleni zaposleni : listaZaposlenih) {
-                    Angazovanje angazovanje = new Angazovanje(0, noviProjekat, zaposleni, noviProjekat.getPocetakRealizacije(), null);
+                    Angazovanje angazovanje = new Angazovanje(0, noviProjekat, zaposleni, noviProjekat.getPocetakRealizacije(), null, false);
                     dbb.zapamti(angazovanje);
                 }
             }
